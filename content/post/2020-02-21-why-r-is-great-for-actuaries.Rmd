@@ -15,7 +15,7 @@ There are different IT tools in different areas.
 
 The actuarial reporting process can be divided into the following areas:
 
-![](../img/actuarial-reporting.png)
+![](https://raw.githubusercontent.com/zchmielewska/actuaryr-webpage/master/content/img/actuarial-reporting.png)
 
 For **valuation models**, specialized software is used, such as Prophet or RAFM.
 I don't think R can easily replace them. 

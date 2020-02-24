@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Why R for actuaries? &middot; R for Actuaries</title>
+        <meta name="description" content="The actuarial reporting processThe process of life insurance actuarial reporting consists of several steps.There are different IT tools in different areas.
+The actuarial reporting process can be divided into the following areas:
+For valuation models, specialized software is used, such as Prophet or RAFM.I don’t think R can easily replace them.Valuation models consist of a vast amount of variables that interact with each other.It’s not comfortable to work with a big amount of interrelated variables in R.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.65.2" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" href="/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+    </head>
+    <body>
+        
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="r4a" href="/">r4a</a>
+                            </h1>
+                        
+                        <a class="button-square" href="/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:zchmielewska@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Why R for actuaries?</h1>
+    
+    <p class="post-date post-line">
+        <span>Published <time datetime="2020-02-24" itemprop="datePublished">2020-02-24</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">zchmielewska</a>
+            </span>
+        </span>
+    </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<div id="the-actuarial-reporting-process" class="section level1">
+<h1>The actuarial reporting process</h1>
+<p>The process of life insurance actuarial reporting consists of several steps.
+There are different IT tools in different areas.</p>
+<p>The actuarial reporting process can be divided into the following areas:</p>
+<p><img src="../img/actuarial-reporting.png" /></p>
+<p>For <strong>valuation models</strong>, specialized software is used, such as Prophet or RAFM.
+I don’t think R can easily replace them.
+Valuation models consist of a vast amount of variables that interact with each other.
+It’s not comfortable to work with a big amount of interrelated variables in R.
+The mentioned software has been designed for one thing and one thing only -
+the development of valuation models.
+It requires the models to have a predefined, rigorous structure
+but also allows easy maintenance. However, R is for sure much cheaper!</p>
+<p>For all other areas - policy data, assumptions, reporting and communication -
+R is great!</p>
+</div>
+<div id="what-are-rs-strengths-in-actuarial-reporting" class="section level1">
+<h1>What are R’s strengths in actuarial reporting?</h1>
+<ul>
+<li><p><strong>R doesn’t allow for sweeping stuff under the rug.</strong>
+In Excel, you can easily have one formula for all rows except this one row where you had to change something by hand. R is more strict and all manual adjustments are obvious.</p></li>
+<li><p><strong>R requires tables to be tables.</strong> In Excel, you can have some text in first rows, then a header, then maybe another and finally some values. In R, tables must be tables.</p></li>
+<li><p><strong>R allows for proper version control.</strong>
+R is a code so can be used along with version control tools such as git.
+Using a version control tool means
+the knowledge what changes were made in each version, who made these changes
+and the possibility to revert to previous versions of the model.</p></li>
+<li><p><strong>R makes data wrangling easy.</strong>
+I remember struggling to pivot longer a table in Excel.
+Thanks to tidyverse and other packages, data manipulation in R is easy and elegant.
+New packages get developed every day thanks to the vibrant R community.</p></li>
+<li><p><strong>R supports reproducible and effective communication.</strong>
+With Rmarkdown, the production of financial reports can be easily automated.
+With ggplot2 and Shiny apps the results can be effectively passed on
+to a wider audience.</p></li>
+</ul>
+</div>
+<div id="what-are-rs-weaknesses-in-the-actuarial-reporting" class="section level1">
+<h1>What are R’s weaknesses in the actuarial reporting?</h1>
+<ul>
+<li><p><strong>R is not as popular as Excel.</strong>
+Many people know how to use Excel.
+Excel is used by actuaries as well as other professionals
+such as financial analysts and accountants.
+R is not as popular as Excel so requires additional training for employees.</p></li>
+<li><p><strong>R is not a commercial product.</strong>
+Excel’s commercial character indicates the accountability of the creators
+for how it operates. R is open-source.
+Packages are created by individuals for you to use.
+However, you can not blame them if something goes wrong.</p></li>
+</ul>
+<p>I see a great potential of using R in the actuarial reporting.
+I hope that more and more insurance companies will use R!</p>
+</div>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        
+
+        
+
+        
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="r4a" href="/">r4a</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="/js/jquery-1.11.3.min.js"></script>
+        <script src="/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="/js/scripts.js"></script>
+    </body>
+</html>
+

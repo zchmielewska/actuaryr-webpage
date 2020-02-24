@@ -1,0 +1,70 @@
+---
+title: Why R for actuaries?
+author: zchmielewska
+date: '2020-02-24'
+slug: why-r-for-actuaries
+categories: []
+tags: []
+description: ''
+---
+
+# The actuarial reporting process
+
+The process of life insurance actuarial reporting consists of several steps.
+There are different IT tools in different areas.
+
+The actuarial reporting process can be divided into the following areas:
+
+![](../img/actuarial-reporting.png)
+
+For **valuation models**, specialized software is used, such as Prophet or RAFM.
+I don't think R can easily replace them. 
+Valuation models consist of a vast amount of variables that interact with each other. 
+It's not comfortable to work with a big amount of interrelated variables in R. 
+The mentioned software has been designed for one thing and one thing only - 
+the development of valuation models. 
+It requires the models to have a predefined, rigorous structure
+but also allows easy maintenance. However, R is for sure much cheaper!
+
+For all other areas - policy data, assumptions, reporting and communication - 
+R is great!
+
+# What are R's strengths in actuarial reporting?
+
+* **R doesn't allow for sweeping stuff under the rug.**
+In Excel, you can easily have one formula for all rows except this one row where you had to change something by hand. R is more strict and all manual adjustments are obvious.
+
+* **R requires tables to be tables.** In Excel, you can have some text in first rows, then a header, then maybe another and finally some values. In R, tables must be tables.
+
+* **R allows for proper version control.**
+R is a code so can be used along with version control tools such as git. 
+Using a version control tool means 
+the knowledge what changes were made in each version, who made these changes 
+and the possibility to revert to previous versions of the model.
+
+* **R makes data wrangling easy.**
+I remember struggling to pivot longer a table in Excel. 
+Thanks to tidyverse and other packages, data manipulation in R is easy and elegant. 
+New packages get developed every day thanks to the vibrant R community.
+
+* **R supports reproducible and effective communication.**
+With Rmarkdown, the production of financial reports can be easily automated. 
+With ggplot2 and Shiny apps the results can be effectively passed on 
+to a wider audience.
+
+# What are R's weaknesses in the actuarial reporting?
+
+* **R is not as popular as Excel.**
+Many people know how to use Excel. 
+Excel is used by actuaries as well as other professionals 
+such as financial analysts and accountants.
+R is not as popular as Excel so requires additional training for employees.
+
+* **R is not a commercial product.**
+Excel's commercial character indicates the accountability of the creators
+for how it operates. R is open-source. 
+Packages are created by individuals for you to use. 
+However, you can not blame them if something goes wrong.
+
+I see a great potential of using R in the actuarial reporting.
+I hope that more and more insurance companies will use R!

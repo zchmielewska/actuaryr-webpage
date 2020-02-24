@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on r4a</title>
+    <link>/post/</link>
+    <description>Recent content in Posts on r4a</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>zchmielewska</copyright>
+    <lastBuildDate>Mon, 24 Feb 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Why R for actuaries?</title>
+      <link>/2020/02/24/why-r-for-actuaries/</link>
+      <pubDate>Mon, 24 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/02/24/why-r-for-actuaries/</guid>
+      <description>The actuarial reporting processThe process of life insurance actuarial reporting consists of several steps.There are different IT tools in different areas.
+The actuarial reporting process can be divided into the following areas:
+For valuation models, specialized software is used, such as Prophet or RAFM.I don’t think R can easily replace them.Valuation models consist of a vast amount of variables that interact with each other.It’s not comfortable to work with a big amount of interrelated variables in R.</description>
+    </item>
+    
+  </channel>
+</rss>

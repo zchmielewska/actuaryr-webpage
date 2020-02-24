@@ -1,0 +1,25 @@
+---
+title: Why R is great for actuaries?
+author: zchmielewska
+date: '2020-02-21'
+slug: why-r-is-great-for-actuaries
+categories: []
+tags: []
+description: ''
+---
+
+The process of life insurance actuarial reporting consists of several steps.
+Overall, the process can be divided into:
+
+1. Preparation of policy data
+1. Assumptions setting
+1. Liability valuation
+1. Reporting
+
+Preparation of policy data, assumptions settings and reporting is currently 
+computed with Excel. 
+For the liability valuation, usually the specialized software such as Prophet
+or RAFM is used.
+
+In my opinion R is better for all areas currently dominated by Excel 
+and worse than the specialized software for liabilities' valuation.

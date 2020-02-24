@@ -1,0 +1,77 @@
+baseurl = "https://actuaryr.netlify.com/"
+title = "r4a"
+theme = "ghostwriter"
+languageCode = "en-us"
+copyright = "zchmielewska"
+#googleAnalytics = "XXX"
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+
+[Privacy]
+
+[Privacy.disqus]
+    disable = true
+
+[Privacy.googleAnalytics]
+    anonymizeIP = true
+    respectDoNotTrack = true
+    useSessionStorage = false
+
+[Author]
+    name = "R for Actuaries"
+    # profile = "https://google.com/+XXX"
+
+[Taxonomies]
+    tag = "tags"
+
+[Params]
+    mainSections = ["post"]
+    intro = true
+    headline = "R for Actuaries"
+    # description = ""
+    # github = "https://github.com/XXX"
+    # gitlab = "https://gitlab.com/XXX"
+    # linkedin = "https://linkedin.com/in/XXX/"
+    # gplus = "https://google.com/+XXX"
+    # twitter = "https://twitter.com/XXX"
+    # stackoverflow = "https://stackoverflow.com/users/XXX/YYY"
+    # facebook = "https://www.facebook.com/username"
+    email = "zchmielewska@gmail.com"
+    opengraph = false
+    shareTwitter = false
+    shareFacebook = false
+    shareGooglePlus = false
+    shareLinkedIn = false
+    dateFormat = "2006-01-02"
+    highlightJsUrl = ""
+    highlightJsLocalUrl = ""
+    exponeaJsUrl = ""
+    exponeaTarget = ""
+    exponeaToken = ""
+    exponeaTrackVisits = false
+    readingTime = false
+    readingTimeText = "Estimated reading time:"
+    fathomUrl = ""
+    fathomSiteId = ""
+
+[Permalinks]
+    post = "/:year/:month/:day/:slug/"
+
+[[menu.main]]
+    name = "Blog"
+    url = "/"
+    weight = 1
+
+#[[menu.main]]
+#    name = "Projects"
+#    url = "/project/"
+#    weight = 2
+
+#[[menu.main]]
+#    name = "Contact"
+#    url = "/page/contact/"
+#    weight = 3
+
+#[[menu.main]]
+#    name = "About"
+#    url = "/page/about/"
+#    weight = 4

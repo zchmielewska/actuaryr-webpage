@@ -66,7 +66,7 @@ The table below summarizes all date reference functions.
 | last working day  | `dref_lwdom()` | `dref_lwdoq()` | `dref_lwdoy()` |
 
 All functions take the argument `date`, which is the base date.
-The functions return the result in reference to the base date.
+The functions return the result relative to the base date.
 The functions always work within a specific period: a month, a quarter 
 or a year.
 

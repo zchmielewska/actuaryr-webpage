@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>zchmielewska</copyright>
-    <lastBuildDate>Mon, 24 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 29 Feb 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Easily refer to a reporting date</title>
+      <link>/2020/02/29/refer-to-a-date/</link>
+      <pubDate>Sat, 29 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/02/29/refer-to-a-date/</guid>
+      <description>InstallationThe functions described in this post are included in the actuaryr package.You can install it directly from GitHub.
+if (!require(&amp;quot;actuaryr&amp;quot;)) {devtools::install_github(&amp;quot;zchmielewska/actuaryr&amp;quot;)library(actuaryr)}## Loading required package: actuaryrDate reference functionsPurposeFirst and last days of months, quarters and years are of special meaningfor business reporting.
+The business reports are usually created for the last day of some period,like a month or a year.</description>
+    </item>
     
     <item>
       <title>Why R for Actuaries?</title>

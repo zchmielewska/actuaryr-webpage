@@ -1,0 +1,146 @@
+---
+title: Easily refer to a reporting date
+author: zchmielewska
+date: '2020-02-29'
+slug: refer-to-a-date
+categories: []
+tags: []
+description: ''
+---
+
+# Installation
+
+The functions described in this post are included in the `actuaryr` package.
+You can install it directly from GitHub.
+
+```{r error = FALSE}
+if (!require("actuaryr")) {
+  devtools::install_github("zchmielewska/actuaryr")
+  library(actuaryr)
+}
+```
+
+# Date reference functions
+
+## Purpose
+
+First and last days of months, quarters and years are of special meaning 
+for business reporting.
+
+The business reports are usually created for the last day of some period,
+like a month or a year.
+They enclose data for the first day of this period up to the last.
+If you create your report in the middle of the period, 
+you may need to quickly refer to these dates.
+
+The `dref_` prefix stands for **d**ate **ref**erence functions. 
+The functions with the `dref_` prefix return a reference date to the base date.
+
+## Functions
+
+The functions work for three types of periods:
+
+* a month
+* a quarter
+* a year
+
+The functions return one of the four types of reference dates:
+
+* the first day
+* the first working day
+* the last day
+* the last working day
+
+The names of functions combine the `dref_` prefix and the first letters 
+of the chosen reference date.
+
+For example, `dref_fdoy()` returns the **f**irst **d**ay **o**f a **y**ear.
+
+The table below summarizes all date reference functions.
+
+|                   | of month       | of quarter     | of year        |
+|-------------------|----------------|----------------|----------------|
+| first day         | `dref_fdom()`  | `dref_fdoq()`  | `dref_fdoy()`  |
+| first working day | `dref_fwdom()` | `dref_fwdoq()` | `dref_fwdoy()` |
+| last day          | `dref_ldom()`  | `dref_ldoq()`  | `dref_ldoy()`  |
+| last working day  | `dref_lwdom()` | `dref_lwdoq()` | `dref_lwdoy()` |
+
+All functions take the argument `date`, which is the base date.
+The functions return the result in reference to the base date.
+The functions always work within a specific period: a month, a quarter 
+or a year.
+
+### Monthly periods
+
+The reference dates in the image below can be retrieved 
+with the following functions:
+
+* `dref_fdom()` - dark blue
+* `dref_fwdom()` - light blue
+* `dref_ldom()` - dark green
+* `dref_lwdom()` - light green
+
+The base date has been marked with orange.
+
+![](/post/2020-02-29-refer-to-a-date_files/dref_monthly.png)
+
+```{r}
+dref_fdom("2020-02-14")
+dref_fwdom("2020-02-14")
+dref_ldom("2020-02-14")
+dref_lwdom("2020-02-14")
+```
+
+### Quarterly periods
+
+The reference dates in the image below can be retrieved 
+with the following functions:
+
+* `dref_fdoq()` - dark blue
+* `dref_fwdoq()` - light blue
+* `dref_ldoq()` - dark green
+* `dref_lwdoq()` - light green
+
+The base date has been marked with orange.
+
+**Watch out!** 
+The first day of a year is the same as the first working day of a year. 
+The last day of a year is the same as the last working day of a year.
+Hence, the same day is marked with two colours (darker and lighter).
+
+![](/post/2020-02-29-refer-to-a-date_files/dref_quarterly.png)
+
+```{r}
+dref_fdoq("2020-05-24")
+dref_fwdoq("2020-05-24")
+dref_ldoq("2020-05-24")
+dref_lwdoq("2020-05-24")
+```
+
+### Yearly periods
+
+The reference dates in the image below can be retrieved 
+with the following functions:
+
+* `dref_fdoy()` - dark blue
+* `dref_fwdoy()` - light blue
+* `dref_ldoy()` - dark green
+* `dref_lwdoy()` - light green
+
+The base date has been marked with orange.
+
+**Watch out!** 
+The first day of a year is the same as the first working day of a year. 
+The last day of a year is the same as the last working day of a year.
+Hence, the same day is marked with two colours (darker and lighter).
+
+![](/post/2020-02-29-refer-to-a-date_files/dref_yearly.png)
+
+```{r}
+dref_fdoy("2020-09-21")
+dref_fwdoy("2020-09-21")
+dref_ldoy("2020-09-21")
+dref_lwdoy("2020-09-21")
+```
+
+In case of any bugs, [raise an issue](https://github.com/zchmielewska/actuaryr/issues).

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Easily refer to a reporting date &middot; R for Actuaries</title>
+        <meta name="description" content="InstallationThe functions described in this post are included in the actuaryr package.You can install it directly from GitHub.
+if (!require(&quot;actuaryr&quot;)) {devtools::install_github(&quot;zchmielewska/actuaryr&quot;)library(actuaryr)}## Loading required package: actuaryrDate reference functionsPurposeFirst and last days of months, quarters and years are of special meaningfor business reporting.
+The business reports are usually created for the last day of some period,like a month or a year.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.65.2" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" href="/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+    </head>
+    <body>
+        
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="r4a" href="/">r4a</a>
+                            </h1>
+                        
+                        <a class="button-square" href="/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:zchmielewska@gmail.com">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Easily refer to a reporting date</h1>
+    
+    <p class="post-date post-line">
+        <span>Published <time datetime="2020-02-29" itemprop="datePublished">2020-02-29</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">zchmielewska</a>
+            </span>
+        </span>
+    </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<div id="installation" class="section level1">
+<h1>Installation</h1>
+<p>The functions described in this post are included in the <code>actuaryr</code> package.
+You can install it directly from GitHub.</p>
+<pre class="r"><code>if (!require(&quot;actuaryr&quot;)) {
+  devtools::install_github(&quot;zchmielewska/actuaryr&quot;)
+  library(actuaryr)
+}</code></pre>
+<pre><code>## Loading required package: actuaryr</code></pre>
+</div>
+<div id="date-reference-functions" class="section level1">
+<h1>Date reference functions</h1>
+<div id="purpose" class="section level2">
+<h2>Purpose</h2>
+<p>First and last days of months, quarters and years are of special meaning
+for business reporting.</p>
+<p>The business reports are usually created for the last day of some period,
+like a month or a year.
+They enclose data for the first day of this period up to the last.
+If you create your report in the middle of the period,
+you may need to quickly refer to these dates.</p>
+<p>The <code>dref_</code> prefix stands for <strong>d</strong>ate <strong>ref</strong>erence functions.
+The functions with the <code>dref_</code> prefix return a reference date to the base date.</p>
+</div>
+<div id="functions" class="section level2">
+<h2>Functions</h2>
+<p>The functions work for three types of periods:</p>
+<ul>
+<li>a month</li>
+<li>a quarter</li>
+<li>a year</li>
+</ul>
+<p>The functions return one of the four types of reference dates:</p>
+<ul>
+<li>the first day</li>
+<li>the first working day</li>
+<li>the last day</li>
+<li>the last working day</li>
+</ul>
+<p>The names of functions combine the <code>dref_</code> prefix and the first letters
+of the chosen reference date.</p>
+<p>For example, <code>dref_fdoy()</code> returns the <strong>f</strong>irst <strong>d</strong>ay <strong>o</strong>f a <strong>y</strong>ear.</p>
+<p>The table below summarizes all date reference functions.</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>of month</th>
+<th>of quarter</th>
+<th>of year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>first day</td>
+<td><code>dref_fdom()</code></td>
+<td><code>dref_fdoq()</code></td>
+<td><code>dref_fdoy()</code></td>
+</tr>
+<tr class="even">
+<td>first working day</td>
+<td><code>dref_fwdom()</code></td>
+<td><code>dref_fwdoq()</code></td>
+<td><code>dref_fwdoy()</code></td>
+</tr>
+<tr class="odd">
+<td>last day</td>
+<td><code>dref_ldom()</code></td>
+<td><code>dref_ldoq()</code></td>
+<td><code>dref_ldoy()</code></td>
+</tr>
+<tr class="even">
+<td>last working day</td>
+<td><code>dref_lwdom()</code></td>
+<td><code>dref_lwdoq()</code></td>
+<td><code>dref_lwdoy()</code></td>
+</tr>
+</tbody>
+</table>
+<p>All functions take the argument <code>date</code>, which is the base date.
+The functions return the result in reference to the base date.
+The functions always work within a specific period: a month, a quarter
+or a year.</p>
+<div id="monthly-periods" class="section level3">
+<h3>Monthly periods</h3>
+<p>The reference dates in the image below can be retrieved
+with the following functions:</p>
+<ul>
+<li><code>dref_fdom()</code> - dark blue</li>
+<li><code>dref_fwdom()</code> - light blue</li>
+<li><code>dref_ldom()</code> - dark green</li>
+<li><code>dref_lwdom()</code> - light green</li>
+</ul>
+<p>The base date has been marked with orange.</p>
+<p><img src="/post/2020-02-29-refer-to-a-date_files/dref_monthly.png" /></p>
+<pre class="r"><code>dref_fdom(&quot;2020-02-14&quot;)</code></pre>
+<pre><code>## [1] &quot;2020-02-01&quot;</code></pre>
+<pre class="r"><code>dref_fwdom(&quot;2020-02-14&quot;)</code></pre>
+<pre><code>## [1] &quot;2020-02-03&quot;</code></pre>
+<pre class="r"><code>dref_ldom(&quot;2020-02-14&quot;)</code></pre>
+<pre><code>## [1] &quot;2020-02-29&quot;</code></pre>
+<pre class="r"><code>dref_lwdom(&quot;2020-02-14&quot;)</code></pre>
+<pre><code>## [1] &quot;2020-02-28&quot;</code></pre>
+</div>
+<div id="quarterly-periods" class="section level3">
+<h3>Quarterly periods</h3>
+<p>The reference dates in the image below can be retrieved
+with the following functions:</p>
+<ul>
+<li><code>dref_fdoq()</code> - dark blue</li>
+<li><code>dref_fwdoq()</code> - light blue</li>
+<li><code>dref_ldoq()</code> - dark green</li>
+<li><code>dref_lwdoq()</code> - light green</li>
+</ul>
+<p>The base date has been marked with orange.</p>
+<p><strong>Watch out!</strong>
+The first day of a year is the same as the first working day of a year.
+The last day of a year is the same as the last working day of a year.
+Hence, the same day is marked with two colours (darker and lighter).</p>
+<p><img src="/post/2020-02-29-refer-to-a-date_files/dref_quarterly.png" /></p>
+<pre class="r"><code>dref_fdoq(&quot;2020-05-24&quot;)</code></pre>
+<pre><code>## [1] &quot;2020-04-01&quot;</code></pre>
+<pre class="r"><code>dref_fwdoq(&quot;2020-05-24&quot;)</code></pre>
+<pre><code>## [1] &quot;2020-04-01&quot;</code></pre>
+<pre class="r"><code>dref_ldoq(&quot;2020-05-24&quot;)</code></pre>
+<pre><code>## [1] &quot;2020-06-30&quot;</code></pre>
+<pre class="r"><code>dref_lwdoq(&quot;2020-05-24&quot;)</code></pre>
+<pre><code>## [1] &quot;2020-06-30&quot;</code></pre>
+</div>
+<div id="yearly-periods" class="section level3">
+<h3>Yearly periods</h3>
+<p>The reference dates in the image below can be retrieved
+with the following functions:</p>
+<ul>
+<li><code>dref_fdoy()</code> - dark blue</li>
+<li><code>dref_fwdoy()</code> - light blue</li>
+<li><code>dref_ldoy()</code> - dark green</li>
+<li><code>dref_lwdoy()</code> - light green</li>
+</ul>
+<p>The base date has been marked with orange.</p>
+<p><strong>Watch out!</strong>
+The first day of a year is the same as the first working day of a year.
+The last day of a year is the same as the last working day of a year.
+Hence, the same day is marked with two colours (darker and lighter).</p>
+<p><img src="/post/2020-02-29-refer-to-a-date_files/dref_yearly.png" /></p>
+<pre class="r"><code>dref_fdoy(&quot;2020-09-21&quot;)</code></pre>
+<pre><code>## [1] &quot;2020-01-01&quot;</code></pre>
+<pre class="r"><code>dref_fwdoy(&quot;2020-09-21&quot;)</code></pre>
+<pre><code>## [1] &quot;2020-01-01&quot;</code></pre>
+<pre class="r"><code>dref_ldoy(&quot;2020-09-21&quot;)</code></pre>
+<pre><code>## [1] &quot;2020-12-31&quot;</code></pre>
+<pre class="r"><code>dref_lwdoy(&quot;2020-09-21&quot;)</code></pre>
+<pre><code>## [1] &quot;2020-12-31&quot;</code></pre>
+<p>In case of any bugs, <a href="https://github.com/zchmielewska/actuaryr/issues">raise an issue</a>.</p>
+</div>
+</div>
+</div>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        
+
+        
+
+        
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="r4a" href="/">r4a</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="/js/jquery-1.11.3.min.js"></script>
+        <script src="/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="/js/scripts.js"></script>
+    </body>
+</html>
+

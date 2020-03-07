@@ -11,13 +11,9 @@ description: ''
 # Installation
 
 The functions described in this post are included in the `actuaryr` package.
-You can install it directly from GitHub.
 
 ```{r error = FALSE}
-if (!require("actuaryr")) {
-  devtools::install_github("zchmielewska/actuaryr")
-  library(actuaryr)
-}
+library(actuaryr)
 ```
 
 # Date reference functions

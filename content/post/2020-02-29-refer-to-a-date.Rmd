@@ -12,7 +12,7 @@ description: ''
 
 The functions described in this post are included in the `actuaryr` package.
 
-```{r error = FALSE}
+```{r}
 library(actuaryr)
 ```
 

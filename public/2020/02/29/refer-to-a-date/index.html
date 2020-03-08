@@ -4,9 +4,9 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Easily refer to a reporting date &middot; R for Actuaries</title>
-        <meta name="description" content="InstallationThe functions described in this post are included in the actuaryr package.You can install it directly from GitHub.
-if (!require(&quot;actuaryr&quot;)) {devtools::install_github(&quot;zchmielewska/actuaryr&quot;)library(actuaryr)}## Loading required package: actuaryrDate reference functionsPurposeFirst and last days of months, quarters and years are of special meaningfor business reporting.
-The business reports are usually created for the last day of some period,like a month or a year.">
+        <meta name="description" content="InstallationThe functions described in this post are included in the actuaryr package.
+library(actuaryr)Date reference functionsPurposeFirst and last days of months, quarters and years are of special meaningfor business reporting.
+The business reports are usually created for the last day of some period,like a month or a year.They enclose data for the first day of this period up to the last.If you create your report in the middle of the period,you may need to quickly refer to these dates.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
         <meta name="generator" content="Hugo 0.65.2" />
@@ -87,13 +87,8 @@ The business reports are usually created for the last day of some period,like a
 
 <div id="installation" class="section level1">
 <h1>Installation</h1>
-<p>The functions described in this post are included in the <code>actuaryr</code> package.
-You can install it directly from GitHub.</p>
-<pre class="r"><code>if (!require(&quot;actuaryr&quot;)) {
-  devtools::install_github(&quot;zchmielewska/actuaryr&quot;)
-  library(actuaryr)
-}</code></pre>
-<pre><code>## Loading required package: actuaryr</code></pre>
+<p>The functions described in this post are included in the <code>actuaryr</code> package.</p>
+<pre class="r"><code>library(actuaryr)</code></pre>
 </div>
 <div id="date-reference-functions" class="section level1">
 <h1>Date reference functions</h1>
@@ -165,7 +160,7 @@ of the chosen reference date.</p>
 </tbody>
 </table>
 <p>All functions take the argument <code>date</code>, which is the base date.
-The functions return the result in reference to the base date.
+The functions return the result relative to the base date.
 The functions always work within a specific period: a month, a quarter
 or a year.</p>
 <div id="monthly-periods" class="section level3">

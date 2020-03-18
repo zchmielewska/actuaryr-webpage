@@ -1,0 +1,202 @@
+---
+title: Compare two tables with compare()
+author: zchmielewska
+date: '2020-03-14'
+slug: compare-two-tables
+categories: []
+tags: []
+description: ''
+---
+
+A big chunk of actuarial life consists of comparing things.
+
+After preparing assumptions tables and policy data for valuation models,
+it's useful to check how they change over a reporting period 
+to understand the magnitude of movements and for overall sense-check.
+
+Also during the model development, it's important to understand the impact
+of the development on the results.
+The regression analysis helps to understand the impact of each step.
+
+## Methodology
+
+The overall methodology of the comparison in `compoare()`:
+
+1. Only common columns of the two data frames are compared. 
+The rest of the columns are ignored for the comparison.
+1. Only common rows of the two data frames are compared. 
+If one data frame has more rows, the extra rows are removed 
+from the comparison.
+1. If the same columns have different types between the two tables, 
+the weaker type gets coerced to the stronger type. 
+The order of strength: logical < integer < double < character.
+1. The comparison depends on the type: 
+for numericals the absolute difference is returned, 
+for characters either `the_same` or `different` is returned.
+1. Factor, POSIXct and Date classes are coerced to characters.
+
+Let's see some examples.
+
+The `compare()` function helps to compare two data frames. 
+The function can be loaded using:
+
+```{r message = FALSE}
+devtools::install_github("zchmielewska/actuaryr", ref = "dev")
+library(actuaryr)
+```
+
+
+## Example 1
+
+```{r echo = FALSE}
+x <- data.frame(
+  v1 = c(1, 2, 3),
+  v2 = c("a", "b", "c"),
+  stringsAsFactors = FALSE
+)
+
+y <- data.frame(
+  v1 = c(1, 2, 2),
+  v2 = c("a", "c", "c"),
+  stringsAsFactors = FALSE
+)
+```
+
+LHS:
+
+```{r}
+print(x)
+```
+
+RHS:
+
+```{r}
+print(y)
+```
+
+Result:
+
+```{r}
+compare(x, y)
+```
+
+For numericals, the function returns the absolute difference. 
+RHS is substracted from LHS.
+For characters, the function returns either `the_same`,
+if the two values are equal, or `different` otherwise.
+
+## Example 2
+
+```{r echo = FALSE}
+x <- data.frame(
+  v1 = c(1, 2, 3),
+  v2 = c("a", "b", "c"),
+  v3 = c(4, 5, 6),
+  stringsAsFactors = FALSE
+)
+
+y <- data.frame(
+  v1 = c(1, 2, 2),
+  v2 = c("a", "c", "c"),
+  stringsAsFactors = FALSE
+)
+```
+
+LHS:
+
+```{r}
+print(x)
+```
+
+RHS:
+
+```{r}
+print(y)
+```
+
+Result:
+
+```{r}
+compare(x, y)
+```
+
+The diagnostic message informs that there is no column `v3` in the second table, 
+so this column has been removed from the comparison. Only columns `v1` and `v2` 
+are compared.
+
+## Example 3
+
+```{r echo = FALSE}
+x <- data.frame(
+  v1 = c(1, 2, 3),
+  v2 = c("a", "b", "c"),
+  stringsAsFactors = FALSE
+)
+
+y <- data.frame(
+  v1 = c(1, 2),
+  v2 = c("a", "c"),
+  stringsAsFactors = FALSE
+)
+```
+
+LHS:
+
+```{r}
+print(x)
+```
+
+RHS:
+
+```{r}
+print(y)
+```
+
+Result:
+
+```{r}
+compare(x, y)
+```
+
+The diagnostic messages concern the issue that 
+there are 2 rows in the second table and 3 rows in the first table.
+The 3rd row in the first table has been removed for the comparison.
+Only the first 2 rows of both tables are compared.
+
+## Example 4
+
+```{r echo = FALSE}
+x <- data.frame(
+  v1 = c(1, 2),
+  stringsAsFactors = FALSE
+)
+
+y <- data.frame(
+  v1 = c("1", "2"),
+  stringsAsFactors = FALSE
+)
+```
+
+LHS:
+
+```{r}
+str(x)
+```
+
+RHS:
+
+```{r}
+str(y)
+```
+
+Result:
+
+```{r}
+compare(x, y)
+```
+
+Columns with weaker types are coerced to columns with stronger types.
+
+In this example, the `v1` column in the first table is a double and
+in the second table it's a character.
+For comparison, the `v1` column in the first table is coerced to a character.

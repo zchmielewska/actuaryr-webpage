@@ -18,10 +18,10 @@
       <pubDate>Sat, 14 Mar 2020 00:00:00 +0000</pubDate>
       
       <guid>/2020/03/14/compare-two-tables/</guid>
-      <description>A big chunk of actuarial life consists of comparing things.
-Actuaries prepare assumptions tables and check how they changeover a reporting period. After the model development, they are interestedhow the changes impact the valuation results. The comparison is alsonecessary for the regression analysis.
-InstallationThe compare() function helps to compare two data frames.The function can be loaded using:
-devtools::install_github(&amp;quot;zchmielewska/actuaryr&amp;quot;, ref = &amp;quot;dev&amp;quot;)library(actuaryr)The overall methodology of the comparison:</description>
+      <description>UsageA big chunk of actuarial life consists of comparing things.
+After preparing assumptions tables and policy data for valuation models,it’s useful to check how they change over a reporting periodto understand the magnitude of movements and for overall sense-check.
+During the model development, it’s important to understand the impactof each of the components on the final results.
+The compare() function helps to see the differences of two tables.</description>
     </item>
     
     <item>

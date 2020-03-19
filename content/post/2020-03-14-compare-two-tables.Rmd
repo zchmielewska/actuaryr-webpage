@@ -14,8 +14,7 @@ A big chunk of actuarial life consists of comparing things.
 
 After preparing assumptions tables and policy data for valuation models,
 it's useful to check how they change over a reporting period 
-to understand the magnitude of movements and for overall sense-check.
-
+to understand the magnitude of movements.
 During the model development, it's important to understand the impact
 of each of the components on the final results.
 
@@ -58,32 +57,24 @@ compare(x, y)
 
 The result of the comparison is:
 
-* for numericals - the absolute difference between `x` and `y`,
+* for numericals - the absolute difference,
 * for characters - the value either `the_same` or `different`.
 
 The function prints few diagnostic messages. 
 These diagnostic messages result from the approach taken for the comparison. 
 The approach is described in the next section.
 
-# Methodology
+# Comparison approach
 
 The `compare()` function uses the following approach:
 
 1. Only common columns are compared. 
-
 2. Only common rows are compared. 
-
-3. If the same columns have different types between the two tables, 
-the weaker type gets coerced to the stronger type. 
-The order of strength: logical < integer < double < character.
-
-4. The comparison depends on the type: 
-for numericals the absolute difference is returned, 
-for characters either `the_same` or `different` is returned.
+3. Columns are coerced to common types.
 
 Let's see some examples of this behaviour.
 
-## Example 1 - only common columns
+## Example 1 - common columns
 
 Only common columns of the two data frames are compared. 
 The rest of the columns are ignored for the comparison.
@@ -102,71 +93,25 @@ y <- data.frame(
 )
 ```
 
-LHS:
-
 ```{r}
 print(x)
 ```
 
-RHS:
-
 ```{r}
 print(y)
 ```
-
-Result:
 
 ```{r}
 compare(x, y)
 ```
 
 Only `v1` is a common column between the two tables, 
-so the rest of the columns have been ignored.
+so the rest of the columns (`v2` in LHS and `v3` in RHS) have been ignored.
 
-## Example 2
+## Example 2 - common rows
+
 Only common rows of the two data frames are compared. 
-If one data frame has more rows, the extra rows are removed 
-from the comparison.
-
-
-```{r echo = FALSE}
-x <- data.frame(
-  v1 = c(1, 2, 3),
-  v2 = c("a", "b", "c"),
-  v3 = c(4, 5, 6),
-  stringsAsFactors = FALSE
-)
-
-y <- data.frame(
-  v1 = c(1, 2, 2),
-  v2 = c("a", "c", "c"),
-  stringsAsFactors = FALSE
-)
-```
-
-LHS:
-
-```{r}
-print(x)
-```
-
-RHS:
-
-```{r}
-print(y)
-```
-
-Result:
-
-```{r}
-compare(x, y)
-```
-
-The diagnostic message informs that there is no column `v3` in the second table, 
-so this column has been removed from the comparison. Only columns `v1` and `v2` 
-are compared.
-
-## Example 3
+If one data frame has more rows, the extra rows are removed for the comparison.
 
 ```{r echo = FALSE}
 x <- data.frame(
@@ -182,63 +127,51 @@ y <- data.frame(
 )
 ```
 
-LHS:
-
 ```{r}
 print(x)
 ```
-
-RHS:
 
 ```{r}
 print(y)
 ```
 
-Result:
-
 ```{r}
 compare(x, y)
 ```
 
-The diagnostic messages concern the issue that 
-there are 2 rows in the second table and 3 rows in the first table.
-The 3rd row in the first table has been removed for the comparison.
-Only the first 2 rows of both tables are compared.
+The diagnostic message concerns the issue that 
+there are 3 rows in LHS and only 2 rows in RHS.
+The 3rd row in LHS has been removed for the comparison.
+Only the first 2 rows are compared.
 
-## Example 4
+## Example 3 - common types
+
+If the same columns have different types between the two tables, 
+the weaker type gets coerced to the stronger type. 
+The order of strength: logical < integer < double < character.
 
 ```{r echo = FALSE}
 x <- data.frame(
-  v1 = c(1, 2),
-  stringsAsFactors = FALSE
+  v1 = c(1, 2, 3)
 )
 
 y <- data.frame(
-  v1 = c("1", "2"),
+  v1 = c("1", "2", "3"),
   stringsAsFactors = FALSE
 )
 ```
-
-LHS:
 
 ```{r}
 str(x)
 ```
 
-RHS:
-
 ```{r}
 str(y)
 ```
-
-Result:
 
 ```{r}
 compare(x, y)
 ```
 
-Columns with weaker types are coerced to columns with stronger types.
-
-In this example, the `v1` column in the first table is a double and
-in the second table it's a character.
+The `v1` column in LHS is a double and in RHS a character.
 For comparison, the `v1` column in the first table is coerced to a character.

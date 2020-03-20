@@ -7,10 +7,22 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>zchmielewska</copyright>
-    <lastBuildDate>Fri, 20 Mar 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 27 Mar 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Reference dates from the previous period</title>
+      <link>/2020/03/27/easily-return-reference-dates-from-previous-periods/</link>
+      <pubDate>Fri, 27 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/03/27/easily-return-reference-dates-from-previous-periods/</guid>
+      <description>UsageThe functions return the last day of the previous month, quarter or year.These functions might be of use if you are preparing, for example,the results for the first quarter of 2020 (Q1 2020) and want to compare themagainst the year-end results (YE 2019).
+You can load the package with:
+library(&amp;quot;actuaryr&amp;quot;)The functions are:
+dref_mtd() - returns month-to-datedref_qtd() - returns quarter-to-datedref_ytd() - returns year-to-datedref_mtd(), dref_qtd() and dref_ytd() always return the last dayof the preceding time period (rather than the last working day).</description>
+    </item>
     
     <item>
       <title>compare() two tables</title>
@@ -24,7 +36,7 @@ The compare() function helps to see the differences of two tables.</description>
     </item>
     
     <item>
-      <title>Easily return reference dates</title>
+      <title>Reference dates within the period</title>
       <link>/2020/02/29/refer-to-a-date/</link>
       <pubDate>Sat, 29 Feb 2020 00:00:00 +0000</pubDate>
       

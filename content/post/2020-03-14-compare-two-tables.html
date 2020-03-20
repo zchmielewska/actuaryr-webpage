@@ -1,7 +1,7 @@
 ---
-title: Compare two tables with compare()
+title: compare() two tables
 author: zchmielewska
-date: '2020-03-14'
+date: '2020-03-20'
 slug: compare-two-tables
 categories: []
 tags: []
@@ -12,14 +12,14 @@ description: ''
 
 <div id="usage" class="section level1">
 <h1>Usage</h1>
-<p>A big chunk of actuarial life consists of comparing things.</p>
-<p>After preparing assumptions tables and policy data for valuation models,
+<p>A big chunk of actuarial life consists of comparing stuff.</p>
+<p>After preparation of assumptions tables and policy data for valuation models,
 it’s useful to check how they change over a reporting period
 to understand the magnitude of movements.
 During the model development, it’s important to understand the impact
 of each of the components on the final results.</p>
 <p>The <code>compare()</code> function helps to see the differences of two tables.</p>
-<pre class="r"><code>library(actuaryr)</code></pre>
+<pre class="r"><code>library(&quot;actuaryr&quot;)</code></pre>
 <pre class="r"><code>x &lt;- data.frame(
   v1 = c(1, 2, 3),
   v2 = c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;),
@@ -55,15 +55,15 @@ print(y)</code></pre>
 <p>The result of the comparison is:</p>
 <ul>
 <li>for numericals - the absolute difference,</li>
-<li>for characters - the value either <code>the_same</code> or <code>different</code>.</li>
+<li>for characters - either <code>the_same</code> or <code>different</code>.</li>
 </ul>
-<p>The function prints few diagnostic messages.
+<p>The function prints out diagnostic messages.
 These diagnostic messages result from the approach taken for the comparison.
 The approach is described in the next section.</p>
 </div>
 <div id="comparison-approach" class="section level1">
 <h1>Comparison approach</h1>
-<p>The <code>compare()</code> function uses the following approach:</p>
+<p><code>compare()</code> uses the following approach:</p>
 <ol style="list-style-type: decimal">
 <li>Only common columns are compared.</li>
 <li>Only common rows are compared.</li>
@@ -73,7 +73,7 @@ The approach is described in the next section.</p>
 <div id="example-1---common-columns" class="section level2">
 <h2>Example 1 - common columns</h2>
 <p>Only common columns of the two data frames are compared.
-The rest of the columns are ignored for the comparison.</p>
+The rest of the columns is ignored for the comparison.</p>
 <pre class="r"><code>print(x)</code></pre>
 <pre><code>##   v1 v2
 ## 1  1  a
@@ -92,7 +92,7 @@ The rest of the columns are ignored for the comparison.</p>
 ## 2  0
 ## 3  1</code></pre>
 <p>Only <code>v1</code> is a common column between the two tables,
-so the rest of the columns (<code>v2</code> in LHS and <code>v3</code> in RHS) have been ignored.</p>
+so the rest of the columns (<code>v2</code> in LHS and <code>v3</code> in RHS) has been ignored.</p>
 </div>
 <div id="example-2---common-rows" class="section level2">
 <h2>Example 2 - common rows</h2>
@@ -114,14 +114,14 @@ If one data frame has more rows, the extra rows are removed for the comparison.<
 ## 2  0 different</code></pre>
 <p>The diagnostic message concerns the issue that
 there are 3 rows in LHS and only 2 rows in RHS.
-The 3rd row in LHS has been removed for the comparison.
+The 3<sup>rd</sup> row in LHS has been removed for the comparison.
 Only the first 2 rows are compared.</p>
 </div>
 <div id="example-3---common-types" class="section level2">
 <h2>Example 3 - common types</h2>
 <p>If the same columns have different types between the two tables,
-the weaker type gets coerced to the stronger type.
-The order of strength: logical &lt; integer &lt; double &lt; character.</p>
+the weaker type gets coerced to the stronger type.</p>
+<p>Strength order: logical &lt; integer &lt; double &lt; character.</p>
 <pre class="r"><code>str(x)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    3 obs. of  1 variable:
 ##  $ v1: num  1 2 3</code></pre>
@@ -135,6 +135,6 @@ The order of strength: logical &lt; integer &lt; double &lt; character.</p>
 ## 2 the_same
 ## 3 the_same</code></pre>
 <p>The <code>v1</code> column in LHS is a double and in RHS a character.
-For comparison, the <code>v1</code> column in the first table is coerced to a character.</p>
+For comparison, the <code>v1</code> column LHS is coerced to a character.</p>
 </div>
 </div>

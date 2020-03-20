@@ -1,0 +1,172 @@
+---
+title: compare() two tables
+author: zchmielewska
+date: '2020-03-20'
+slug: compare-two-tables
+categories: []
+tags: []
+description: ''
+---
+
+# Usage
+
+A big chunk of actuarial life consists of comparing stuff.
+
+After preparation of assumptions tables and policy data for valuation models,
+it's useful to check how they change over a reporting period 
+to understand the magnitude of movements.
+During the model development, it's important to understand the impact
+of each of the components on the final results.
+
+The `compare()` function helps to see the differences of two tables.
+
+```{r}
+library("actuaryr")
+```
+
+```{r}
+x <- data.frame(
+  v1 = c(1, 2, 3),
+  v2 = c("a", "b", "c"),
+  v4 = c(10, 10, 10),
+  stringsAsFactors = FALSE
+)
+print(x)
+```
+
+```{r}
+y <- data.frame(
+  v1 = c(1, 2, 4, 5),
+  v2 = c("a", "b", "d", "e"),
+  v3 = c(6, 7, 8, 9),
+  v4 = c("10", "10", "10", "10"),
+  stringsAsFactors = FALSE
+)
+print(y)
+```
+
+```{r}
+compare(x, y)
+```
+
+The result of the comparison is:
+
+* for numericals - the absolute difference,
+* for characters - either `the_same` or `different`.
+
+The function prints out diagnostic messages. 
+These diagnostic messages result from the approach taken for the comparison. 
+The approach is described in the next section.
+
+# Comparison approach
+
+`compare()` uses the following approach:
+
+1. Only common columns are compared. 
+2. Only common rows are compared. 
+3. Columns are coerced to common types.
+
+Let's see some examples of this behaviour.
+
+## Example 1 - common columns
+
+Only common columns of the two data frames are compared. 
+The rest of the columns is ignored for the comparison.
+
+```{r echo = FALSE}
+x <- data.frame(
+  v1 = c(1, 2, 3),
+  v2 = c("a", "b", "c"),
+  stringsAsFactors = FALSE
+)
+
+y <- data.frame(
+  v1 = c(1, 2, 2),
+  v3 = c("d", "e", "f"),
+  stringsAsFactors = FALSE
+)
+```
+
+```{r}
+print(x)
+```
+
+```{r}
+print(y)
+```
+
+```{r}
+compare(x, y)
+```
+
+Only `v1` is a common column between the two tables, 
+so the rest of the columns (`v2` in LHS and `v3` in RHS) has been ignored.
+
+## Example 2 - common rows
+
+Only common rows of the two data frames are compared. 
+If one data frame has more rows, the extra rows are removed for the comparison.
+
+```{r echo = FALSE}
+x <- data.frame(
+  v1 = c(1, 2, 3),
+  v2 = c("a", "b", "c"),
+  stringsAsFactors = FALSE
+)
+
+y <- data.frame(
+  v1 = c(1, 2),
+  v2 = c("a", "c"),
+  stringsAsFactors = FALSE
+)
+```
+
+```{r}
+print(x)
+```
+
+```{r}
+print(y)
+```
+
+```{r}
+compare(x, y)
+```
+
+The diagnostic message concerns the issue that 
+there are 3 rows in LHS and only 2 rows in RHS.
+The 3<sup>rd</sup> row in LHS has been removed for the comparison.
+Only the first 2 rows are compared.
+
+## Example 3 - common types
+
+If the same columns have different types between the two tables, 
+the weaker type gets coerced to the stronger type. 
+
+Strength order: logical < integer < double < character.
+
+```{r echo = FALSE}
+x <- data.frame(
+  v1 = c(1, 2, 3)
+)
+
+y <- data.frame(
+  v1 = c("1", "2", "3"),
+  stringsAsFactors = FALSE
+)
+```
+
+```{r}
+str(x)
+```
+
+```{r}
+str(y)
+```
+
+```{r}
+compare(x, y)
+```
+
+The `v1` column in LHS is a double and in RHS a character.
+For comparison, the `v1` column LHS is coerced to a character.

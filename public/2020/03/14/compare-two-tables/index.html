@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Compare two tables with compare() &middot; R for Actuaries</title>
+        <meta name="description" content="UsageA big chunk of actuarial life consists of comparing things.
+After preparing assumptions tables and policy data for valuation models,it’s useful to check how they change over a reporting periodto understand the magnitude of movements.During the model development, it’s important to understand the impactof each of the components on the final results.
+The compare() function helps to see the differences of two tables.
+library(actuaryr)x &lt;- data.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.67.1" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" href="/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+    </head>
+    <body>
+        
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="r4a" href="/">r4a</a>
+                            </h1>
+                        
+                        <a class="button-square" href="/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:zchmielewska%20[at]%20gmail">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Compare two tables with compare()</h1>
+    
+    <p class="post-date post-line">
+        <span>Published <time datetime="2020-03-14" itemprop="datePublished">2020-03-14</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">zchmielewska</a>
+            </span>
+        </span>
+    </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    
+
+
+<div id="usage" class="section level1">
+<h1>Usage</h1>
+<p>A big chunk of actuarial life consists of comparing things.</p>
+<p>After preparing assumptions tables and policy data for valuation models,
+it’s useful to check how they change over a reporting period
+to understand the magnitude of movements.
+During the model development, it’s important to understand the impact
+of each of the components on the final results.</p>
+<p>The <code>compare()</code> function helps to see the differences of two tables.</p>
+<pre class="r"><code>library(actuaryr)</code></pre>
+<pre class="r"><code>x &lt;- data.frame(
+  v1 = c(1, 2, 3),
+  v2 = c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;),
+  v4 = c(10, 10, 10),
+  stringsAsFactors = FALSE
+)
+print(x)</code></pre>
+<pre><code>##   v1 v2 v4
+## 1  1  a 10
+## 2  2  b 10
+## 3  3  c 10</code></pre>
+<pre class="r"><code>y &lt;- data.frame(
+  v1 = c(1, 2, 4, 5),
+  v2 = c(&quot;a&quot;, &quot;b&quot;, &quot;d&quot;, &quot;e&quot;),
+  v3 = c(6, 7, 8, 9),
+  v4 = c(&quot;10&quot;, &quot;10&quot;, &quot;10&quot;, &quot;10&quot;),
+  stringsAsFactors = FALSE
+)
+print(y)</code></pre>
+<pre><code>##   v1 v2 v3 v4
+## 1  1  a  6 10
+## 2  2  b  7 10
+## 3  4  d  8 10
+## 4  5  e  9 10</code></pre>
+<pre class="r"><code>compare(x, y)</code></pre>
+<pre><code>## Column(s) &#39;v3&#39; are not in LHS so they have been removed from the comparison.
+## RHS has more rows than LHS. The last 1 row(s) of RHS have been removed.
+## Column &#39;v4&#39; in LHS has been coerced from double to character.</code></pre>
+<pre><code>##   v1        v2       v4
+## 1  0  the_same the_same
+## 2  0  the_same the_same
+## 3 -1 different the_same</code></pre>
+<p>The result of the comparison is:</p>
+<ul>
+<li>for numericals - the absolute difference,</li>
+<li>for characters - the value either <code>the_same</code> or <code>different</code>.</li>
+</ul>
+<p>The function prints few diagnostic messages.
+These diagnostic messages result from the approach taken for the comparison.
+The approach is described in the next section.</p>
+</div>
+<div id="comparison-approach" class="section level1">
+<h1>Comparison approach</h1>
+<p>The <code>compare()</code> function uses the following approach:</p>
+<ol style="list-style-type: decimal">
+<li>Only common columns are compared.</li>
+<li>Only common rows are compared.</li>
+<li>Columns are coerced to common types.</li>
+</ol>
+<p>Let’s see some examples of this behaviour.</p>
+<div id="example-1---common-columns" class="section level2">
+<h2>Example 1 - common columns</h2>
+<p>Only common columns of the two data frames are compared.
+The rest of the columns are ignored for the comparison.</p>
+<pre class="r"><code>print(x)</code></pre>
+<pre><code>##   v1 v2
+## 1  1  a
+## 2  2  b
+## 3  3  c</code></pre>
+<pre class="r"><code>print(y)</code></pre>
+<pre><code>##   v1 v3
+## 1  1  d
+## 2  2  e
+## 3  2  f</code></pre>
+<pre class="r"><code>compare(x, y)</code></pre>
+<pre><code>## Column(s) &#39;v3&#39; are not in LHS so they have been removed from the comparison.
+## Column(s) &#39;v2&#39; are not in RHS so they have been removed from the comparison.</code></pre>
+<pre><code>##   v1
+## 1  0
+## 2  0
+## 3  1</code></pre>
+<p>Only <code>v1</code> is a common column between the two tables,
+so the rest of the columns (<code>v2</code> in LHS and <code>v3</code> in RHS) have been ignored.</p>
+</div>
+<div id="example-2---common-rows" class="section level2">
+<h2>Example 2 - common rows</h2>
+<p>Only common rows of the two data frames are compared.
+If one data frame has more rows, the extra rows are removed for the comparison.</p>
+<pre class="r"><code>print(x)</code></pre>
+<pre><code>##   v1 v2
+## 1  1  a
+## 2  2  b
+## 3  3  c</code></pre>
+<pre class="r"><code>print(y)</code></pre>
+<pre><code>##   v1 v2
+## 1  1  a
+## 2  2  c</code></pre>
+<pre class="r"><code>compare(x, y)</code></pre>
+<pre><code>## LHS has more rows than RHS. The last 1 row(s) of LHS have been removed.</code></pre>
+<pre><code>##   v1        v2
+## 1  0  the_same
+## 2  0 different</code></pre>
+<p>The diagnostic message concerns the issue that
+there are 3 rows in LHS and only 2 rows in RHS.
+The 3rd row in LHS has been removed for the comparison.
+Only the first 2 rows are compared.</p>
+</div>
+<div id="example-3---common-types" class="section level2">
+<h2>Example 3 - common types</h2>
+<p>If the same columns have different types between the two tables,
+the weaker type gets coerced to the stronger type.
+The order of strength: logical &lt; integer &lt; double &lt; character.</p>
+<pre class="r"><code>str(x)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    3 obs. of  1 variable:
+##  $ v1: num  1 2 3</code></pre>
+<pre class="r"><code>str(y)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    3 obs. of  1 variable:
+##  $ v1: chr  &quot;1&quot; &quot;2&quot; &quot;3&quot;</code></pre>
+<pre class="r"><code>compare(x, y)</code></pre>
+<pre><code>## Column &#39;v1&#39; in LHS has been coerced from double to character.</code></pre>
+<pre><code>##         v1
+## 1 the_same
+## 2 the_same
+## 3 the_same</code></pre>
+<p>The <code>v1</code> column in LHS is a double and in RHS a character.
+For comparison, the <code>v1</code> column in the first table is coerced to a character.</p>
+</div>
+</div>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        
+
+        
+
+        
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="r4a" href="/">r4a</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="/js/jquery-1.11.3.min.js"></script>
+        <script src="/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="/js/scripts.js"></script>
+    </body>
+</html>
+

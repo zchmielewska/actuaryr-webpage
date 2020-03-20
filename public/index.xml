@@ -7,19 +7,30 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>zchmielewska</copyright>
-    <lastBuildDate>Sat, 29 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 20 Mar 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Easily refer to a reporting date</title>
+      <title>compare() two tables</title>
+      <link>/2020/03/20/compare-two-tables/</link>
+      <pubDate>Fri, 20 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/03/20/compare-two-tables/</guid>
+      <description>UsageA big chunk of actuarial life consists of comparing stuff.
+After preparation of assumptions tables and policy data for valuation models,it’s useful to check how they change over a reporting periodto understand the magnitude of movements.During the model development, it’s important to understand the impactof each of the components on the final results.
+The compare() function helps to see the differences of two tables.</description>
+    </item>
+    
+    <item>
+      <title>Easily return reference dates</title>
       <link>/2020/02/29/refer-to-a-date/</link>
       <pubDate>Sat, 29 Feb 2020 00:00:00 +0000</pubDate>
       
       <guid>/2020/02/29/refer-to-a-date/</guid>
       <description>InstallationThe functions described in this post are included in the actuaryr package.
-library(actuaryr)Date reference functionsPurposeFirst and last days of months, quarters and years are of special meaningfor business reporting.
+library(&amp;quot;actuaryr&amp;quot;)Date reference functionsPurposeFirst and last days of months, quarters and years are of special meaningfor business reporting.
 The business reports are usually created for the last day of some period,like a month or a year.They enclose data for the first day of this period up to the last.If you create your report in the middle of the period,you may need to quickly refer to these dates.</description>
     </item>
     

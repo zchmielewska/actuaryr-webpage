@@ -1,7 +1,7 @@
 ---
 title: Reference dates from the previous period
 author: zchmielewska
-date: '2020-03-27'
+date: '2020-03-26'
 slug: easily-return-reference-dates-from-previous-periods
 categories: []
 tags: []

@@ -1,0 +1,42 @@
+---
+title: change_type() and change_period() of an interest rate curve
+author: zchmielewska
+date: '2020-04-20'
+slug: change-period-and-change-type-of-an-interest-rate-curve
+categories: []
+tags: []
+description: ''
+---
+
+```{r}
+devtools::install_github("zchmielewska/actuaryr")
+library(actuaryr)
+```
+
+# Change type of an interest rates curve
+
+The two common types of interest rates curve are **forward** and **spot**.
+
+With forward rates, we move along the timeline period by period.
+With spot rates, we jump directly from the beginning to the given period.
+
+Imagine an interest rates curve with yearly rates: 1.8%, 2%, 2.2%.
+
+```{r}
+irc_forward <- as_ircurve(rates = c(0.018, 0.02, 0.022), type = "forward")
+print(irc_forward)
+```
+
+The value of 100 after 3 years amounts to:
+
+```{r}
+100*prod(1+irc_forward)
+```
+
+The forward rates can be changed to spot rates with `change_type()`.
+
+```{r}
+irc_spot <- change_type(irc_forward, to = "spot")
+```
+
+

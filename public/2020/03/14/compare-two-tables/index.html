@@ -5,9 +5,8 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Compare two tables with compare() &middot; R for Actuaries</title>
         <meta name="description" content="A big chunk of actuarial life consists of comparing things.
-Actuaries prepare assumptions tables and check how they changeover a reporting period. After the model development, they are interestedhow the changes impact the valuation results. The comparison is alsonecessary for the regression analysis.
-InstallationThe compare() function helps to compare two data frames.The function can be loaded using:
-devtools::install_github(&quot;zchmielewska/actuaryr&quot;, ref = &quot;dev&quot;)library(actuaryr)The overall methodology of the comparison:">
+After preparing assumptions tables and policy data for valuation models,it’s useful to check how they change over a reporting periodto understand the magnitude of movements and for overall sense-check.
+Also during the model development, it’s important to understand the impactof the development on the results.The regression analysis helps to understand the impact of each step.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
         <meta name="generator" content="Hugo 0.65.2" />
@@ -87,19 +86,16 @@ devtools::install_github(&quot;zchmielewska/actuaryr&quot;, ref = &quot;dev&quot
 
 
 <p>A big chunk of actuarial life consists of comparing things.</p>
-<p>Actuaries prepare assumptions tables and check how they change
-over a reporting period. After the model development, they are interested
-how the changes impact the valuation results. The comparison is also
-necessary for the regression analysis.</p>
-<div id="installation" class="section level2">
-<h2>Installation</h2>
-<p>The <code>compare()</code> function helps to compare two data frames.
-The function can be loaded using:</p>
-<pre class="r"><code>devtools::install_github(&quot;zchmielewska/actuaryr&quot;, ref = &quot;dev&quot;)
-library(actuaryr)</code></pre>
-<p>The overall methodology of the comparison:</p>
+<p>After preparing assumptions tables and policy data for valuation models,
+it’s useful to check how they change over a reporting period
+to understand the magnitude of movements and for overall sense-check.</p>
+<p>Also during the model development, it’s important to understand the impact
+of the development on the results.
+The regression analysis helps to understand the impact of each step.</p>
+<div id="methodology" class="section level2">
+<h2>Methodology</h2>
+<p>The overall methodology of the comparison in <code>compoare()</code>:</p>
 <ol style="list-style-type: decimal">
-<li>Factor, POSIXct and Date classes are coerced to characters.</li>
 <li>Only common columns of the two data frames are compared.
 The rest of the columns are ignored for the comparison.</li>
 <li>Only common rows of the two data frames are compared.
@@ -111,8 +107,15 @@ The order of strength: logical &lt; integer &lt; double &lt; character.</li>
 <li>The comparison depends on the type:
 for numericals the absolute difference is returned,
 for characters either <code>the_same</code> or <code>different</code> is returned.</li>
+<li>Factor, POSIXct and Date classes are coerced to characters.</li>
 </ol>
 <p>Let’s see some examples.</p>
+<p>The <code>compare()</code> function helps to compare two data frames.
+The function can be loaded using:</p>
+<pre class="r"><code>devtools::install_github(&quot;zchmielewska/actuaryr&quot;, ref = &quot;dev&quot;)</code></pre>
+<pre><code>## Error in utils::download.file(url, path, method = method, quiet = quiet,  : 
+##   cannot open URL &#39;https://api.github.com/repos/zchmielewska/actuaryr/tarball/dev&#39;</code></pre>
+<pre class="r"><code>library(actuaryr)</code></pre>
 </div>
 <div id="example-1" class="section level2">
 <h2>Example 1</h2>

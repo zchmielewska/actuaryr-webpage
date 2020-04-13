@@ -7,10 +7,29 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>zchmielewska</copyright>
-    <lastBuildDate>Sat, 14 Mar 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 20 Apr 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>change_period() and change_type() of an interest rate curve</title>
+      <link>/2020/04/20/change-period-and-change-type-of-an-interest-rate-curve/</link>
+      <pubDate>Mon, 20 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/04/20/change-period-and-change-type-of-an-interest-rate-curve/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Interest rates curve with as_ircurve()</title>
+      <link>/2020/04/14/interest-rates-curve-in-r/</link>
+      <pubDate>Tue, 14 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/04/14/interest-rates-curve-in-r/</guid>
+      <description>devtools::install_github(&amp;quot;zchmielewska/actuaryr&amp;quot;, ref = &amp;quot;feature/curves&amp;quot;)## Skipping install of &amp;#39;actuaryr&amp;#39; from a github remote, the SHA1 (31188477) has not changed since last install.## Use `force = TRUE` to force installationlibrary(actuaryr)Money changes its value in time. 10 euros today is not the same 10 euros in a year.Interest rates imply how the money changes its value over time.
+Sometimes it is reffered to an interest rate as a single number, like 2% per year.</description>
+    </item>
     
     <item>
       <title>Compare two tables with compare()</title>
@@ -19,9 +38,8 @@
       
       <guid>/2020/03/14/compare-two-tables/</guid>
       <description>A big chunk of actuarial life consists of comparing things.
-Actuaries prepare assumptions tables and check how they changeover a reporting period. After the model development, they are interestedhow the changes impact the valuation results. The comparison is alsonecessary for the regression analysis.
-InstallationThe compare() function helps to compare two data frames.The function can be loaded using:
-devtools::install_github(&amp;quot;zchmielewska/actuaryr&amp;quot;, ref = &amp;quot;dev&amp;quot;)library(actuaryr)The overall methodology of the comparison:</description>
+After preparing assumptions tables and policy data for valuation models,it’s useful to check how they change over a reporting periodto understand the magnitude of movements and for overall sense-check.
+Also during the model development, it’s important to understand the impactof the development on the results.The regression analysis helps to understand the impact of each step.</description>
     </item>
     
     <item>

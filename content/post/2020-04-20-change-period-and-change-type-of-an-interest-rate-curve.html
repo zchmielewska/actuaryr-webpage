@@ -1,0 +1,110 @@
+---
+title: Change an interest rates curve
+author: zchmielewska
+date: '2020-04-26'
+slug: change-period-and-change-type-of-an-interest-rate-curve
+categories: []
+tags: []
+description: ''
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<div id="load-package" class="section level1">
+<h1>Load package</h1>
+<p>To load <code>actuaryr</code> package, use:</p>
+<pre class="r"><code>library(actuaryr)</code></pre>
+</div>
+<div id="change-type-of-an-interest-rates-curve" class="section level1">
+<h1>Change type of an interest rates curve</h1>
+<p>The two common types of interest rates curve are <strong>forward</strong> and <strong>spot</strong>.
+With <strong>forward</strong> rates, we move along the timeline period by period.
+With <strong>spot</strong> rates, we jump directly from the beginning of the period
+to the point on a timeline.</p>
+<p>Imagine an interest rates curve with yearly forward rates: 1.8%, 2%, 2.2%.</p>
+<pre class="r"><code>irc_forward &lt;- as_ircurve(rates = c(0.018, 0.02, 0.022))</code></pre>
+<p>The default arguments’ values for <code>as_ircurve()</code> are
+<code>type = "forward"</code> and <code>period = "year"</code>.</p>
+<pre class="r"><code>print(irc_forward)</code></pre>
+<pre><code>## Interest rate curve
+## Type:   forward 
+## Period: year 
+## Rates:
+## [1] 0.018 0.020 0.022</code></pre>
+<p>The value of <code>100</code> after 3 years amounts to 106.12.</p>
+<pre class="r"><code>100 * prod(1 + irc_forward)</code></pre>
+<pre><code>## [1] 106.1204</code></pre>
+<p>The <strong>forward</strong> rates can be changed to <strong>spot</strong> rates with <code>change_type()</code>.</p>
+<pre class="r"><code>irc_spot &lt;- change_type(irc_forward, to = &quot;spot&quot;)</code></pre>
+<p>The value of 100 after 3 years using <strong>spot</strong> rates amounts to 106.12 as well.</p>
+<pre class="r"><code>100 * (1 + irc_spot[3])^3</code></pre>
+<pre><code>## [1] 106.1204</code></pre>
+<p>The process of changing the curve’s type is <em>recursive</em>.
+If you change the type from <strong>forward</strong> to <strong>spot</strong>
+and then from <strong>spot</strong> to <strong>forward</strong>, you’ll receive the same curve.</p>
+<pre class="r"><code># Let&#39;s import the pipe (%&gt;%) from magrittr
+library(magrittr)
+
+ircurve1 &lt;- as_ircurve(c(0.1, 0.2, 0.3))
+ircurve2 &lt;- ircurve1 %&gt;% change_type(to = &quot;spot&quot;) %&gt;% change_type(to = &quot;forward&quot;)
+print(ircurve2)</code></pre>
+<pre><code>## Interest rate curve
+## Type:   forward 
+## Period: year 
+## Rates:
+## [1] 0.1 0.2 0.3</code></pre>
+</div>
+<div id="change-period-of-an-interest-rate-curve" class="section level1">
+<h1>Change period of an interest rate curve</h1>
+<p>The interest rates are usually presented as <strong>yearly</strong> rates.
+Yearly rates tell us how much will the money be worth in a year’s time.
+It’s also convenient to use <strong>monthly</strong> interest rates, because
+we receive our paychecks on a monthly basis and pay bills on a monthly basis
+as well.</p>
+<p>You can change the interest rates curve from yearly to monthly and
+vice versa with <code>change_period()</code>.</p>
+<div id="from-month-to-year" class="section level2">
+<h2>From month to year</h2>
+<p>You can change the monthly rates in to yearly rates with
+`change_period(ircurve, to = “year”).</p>
+<pre class="r"><code>irc_month &lt;- as_ircurve(rates = c(rep(0.001, 12), rep(0.002, 12)), period = &quot;month&quot;)
+irc_year  &lt;- change_period(irc_month, to = &quot;year&quot;)</code></pre>
+<p>With monthly rates, you gain 3.66 on 100 after two years.</p>
+<pre class="r"><code># Change in value in two years using monthly rates
+100 * prod(1 + irc_month)</code></pre>
+<pre><code>## [1] 103.6625</code></pre>
+<p>With yearly rates, too!</p>
+<pre class="r"><code># Change in value in one year using yearly rate
+100 * prod(1 + irc_year)</code></pre>
+<pre><code>## [1] 103.6625</code></pre>
+<p>If the monthly curve does not cover the whole year, the remaining part is filled
+with <strong>the last</strong> monthly rate.</p>
+<pre class="r"><code># This transformation...
+rates1     &lt;- seq(0.001, 0.009, 0.001)
+irc_month1 &lt;- as_ircurve(rates1, period = &quot;month&quot;)
+irc_year1  &lt;- change_period(irc_month1, to = &quot;year&quot;)
+
+# ...is equivalent to this transformation.
+rates2     &lt;- c(seq(0.001, 0.009, 0.001), rep(0.009, 3))
+irc_month2 &lt;- as_ircurve(rates2, period = &quot;month&quot;)
+irc_year2  &lt;- change_period(irc_month2, to = &quot;year&quot;)</code></pre>
+<p>The change from <strong>year</strong> to <strong>month</strong> assumes that monthly rates within a year
+are equal.</p>
+<pre class="r"><code>irc_year &lt;- as_ircurve(rates = (1+0.01)^12-1)
+change_period(irc_year, to = &quot;month&quot;)</code></pre>
+<pre><code>## Interest rate curve
+## Type:   forward 
+## Period: month 
+## Rates:
+##  [1] 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01</code></pre>
+<p>Hence, the transformation from month to year and from year to month
+is <strong>not</strong> recursive, unless monthly rates are equal.</p>
+<pre class="r"><code># This curve...
+rates      &lt;- seq(0.001, 0.012, 0.001)
+irc_month1 &lt;- as_ircurve(rates, period = &quot;month&quot;)
+
+# ...is different than this curve
+irc_month2 &lt;- irc_month1 %&gt;% change_period(to = &quot;year&quot;) %&gt;% change_period(to = &quot;month&quot;)</code></pre>
+</div>
+</div>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>change_type() and change_period() of an interest rate curve &middot; R for Actuaries</title>
+        <meta name="description" content="devtools::install_github(&quot;zchmielewska/actuaryr&quot;, force = TRUE)## Downloading GitHub repo zchmielewska/actuaryr@master## ## checking for file &#39;C:\Users\admin\AppData\Local\Temp\RtmpGa7h5Z\remotes250423eb691d\zchmielewska-actuaryr-2d9fae0/DESCRIPTION&#39; ...&lt;U&#43;221A&gt; checking for file &#39;C:\Users\admin\AppData\Local\Temp\RtmpGa7h5Z\remotes250423eb691d\zchmielewska-actuaryr-2d9fae0/DESCRIPTION&#39; (406ms)## - preparing &#39;actuaryr&#39;:## checking DESCRIPTION meta-information ...checking DESCRIPTION meta-information ... &lt;U&#43;221A&gt; checking DESCRIPTION meta-information## - checking for LF line-endings in source and make files and shell scripts## - checking for empty or unneeded directories## - building &#39;actuaryr_1.1.1.tar.gz&#39;## ## ## Installing package into &#39;C:/Users/admin/Documents/R/win-library/3.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.65.2" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" href="/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+    </head>
+    <body>
+        
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="r4a" href="/">r4a</a>
+                            </h1>
+                        
+                        <a class="button-square" href="/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:zchmielewska%20[at]%20gmail">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">change_type() and change_period() of an interest rate curve</h1>
+    
+    <p class="post-date post-line">
+        <span>Published <time datetime="2020-04-20" itemprop="datePublished">2020-04-20</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">zchmielewska</a>
+            </span>
+        </span>
+    </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<pre class="r"><code>devtools::install_github(&quot;zchmielewska/actuaryr&quot;, force = TRUE)</code></pre>
+<pre><code>## Downloading GitHub repo zchmielewska/actuaryr@master</code></pre>
+<pre><code>## 
+##   
+  
+  
+   checking for file &#39;C:\Users\admin\AppData\Local\Temp\RtmpGa7h5Z\remotes250423eb691d\zchmielewska-actuaryr-2d9fae0/DESCRIPTION&#39; ...
+  
+&lt;U+221A&gt;  checking for file &#39;C:\Users\admin\AppData\Local\Temp\RtmpGa7h5Z\remotes250423eb691d\zchmielewska-actuaryr-2d9fae0/DESCRIPTION&#39; (406ms)
+## 
+  
+  
+  
+-  preparing &#39;actuaryr&#39;:
+##    checking DESCRIPTION meta-information ...
+  
+   checking DESCRIPTION meta-information ... 
+  
+&lt;U+221A&gt;  checking DESCRIPTION meta-information
+## 
+  
+  
+  
+-  checking for LF line-endings in source and make files and shell scripts
+## 
+  
+  
+  
+-  checking for empty or unneeded directories
+## 
+  
+  
+  
+-  building &#39;actuaryr_1.1.1.tar.gz&#39;
+## 
+  
+   
+## </code></pre>
+<pre><code>## Installing package into &#39;C:/Users/admin/Documents/R/win-library/3.5&#39;
+## (as &#39;lib&#39; is unspecified)</code></pre>
+<pre class="r"><code>library(actuaryr)</code></pre>
+<div id="change-type-of-an-interest-rates-curve" class="section level1">
+<h1>Change type of an interest rates curve</h1>
+<p>The two common types of interest rates curve are <strong>forward</strong> and <strong>spot</strong>.</p>
+<p>With forward rates, we move along the timeline period by period.
+With spot rates, we jump directly from the beginning to the given period.</p>
+<p>Imagine an interest rates curve with yearly rates: 1.8%, 2%, 2.2%.</p>
+<pre class="r"><code>irc_forward &lt;- as_ircurve(rates = c(0.018, 0.02, 0.022), type = &quot;forward&quot;)
+print(irc_forward)</code></pre>
+<pre><code>## Interest rate curve
+## Type:   forward 
+## Period: year 
+## Rates:
+## [1] 0.018 0.020 0.022</code></pre>
+<p>The value of 100 after 3 years amounts to:</p>
+<pre class="r"><code>100*prod(1+irc_forward)</code></pre>
+<pre><code>## [1] 106.1204</code></pre>
+<p>The forward rates can be changed to spot rates with <code>change_type()</code>.</p>
+<pre class="r"><code>irc_spot &lt;- change_type(irc_forward, to = &quot;spot&quot;)
+print(irc_spot)</code></pre>
+<pre><code>## Interest rate curve
+## Type:   spot 
+## Period: year 
+## Rates:
+## [1] 0.01800000 0.01899951 0.01999869</code></pre>
+<p>The value of 100 after 3 years amounts to:</p>
+<pre class="r"><code>100*(1+irc_spot[3])^3</code></pre>
+<pre><code>## [1] 106.1204</code></pre>
+<p>We receive the same results using two different approaches.</p>
+<p>The process of changing the type is recursive.
+If you change the type from forward to spot and then from spot to forward,
+you’ll receive the same curve.</p>
+<pre class="r"><code># Let&#39;s import the pipe (%&gt;%) from magrittr
+library(magrittr)</code></pre>
+<pre><code>## Warning: package &#39;magrittr&#39; was built under R version 3.5.3</code></pre>
+<pre class="r"><code>my_ircurve &lt;- as_ircurve(c(0.1, 0.2, 0.3), type = &quot;forward&quot;)
+print(my_ircurve)</code></pre>
+<pre><code>## Interest rate curve
+## Type:   forward 
+## Period: year 
+## Rates:
+## [1] 0.1 0.2 0.3</code></pre>
+<pre class="r"><code>my_ircurve %&gt;% change_type(to = &quot;spot&quot;) %&gt;% change_type(to = &quot;forward&quot;)</code></pre>
+<pre><code>## Interest rate curve
+## Type:   forward 
+## Period: year 
+## Rates:
+## [1] 0.1 0.2 0.3</code></pre>
+</div>
+<div id="change-period-of-an-interest-rate-curve" class="section level1">
+<h1>Change period of an interest rate curve</h1>
+<p>The interest rates are usually presented as yearly rates, which tell us
+how much will the money be worth in a year’s time.</p>
+<p>However, it’s convenient to present cashflows on a monthly basis.
+We receive our paychecks on a monthly basis and pay bills on a monthly basis.</p>
+<p>You can change the interest rates curve from yearly to monthly and
+vice verse with <code>change_period()</code>.</p>
+<pre class="r"><code>irc_month &lt;- as_ircurve(rates = c(rep(0.001, 12), rep(0.002, 12)), type = &quot;forward&quot;, period = &quot;month&quot;)
+irc_year &lt;- change_period(irc_month, to = &quot;year&quot;)
+print(irc_year)</code></pre>
+<pre><code>## Interest rate curve
+## Type:   forward 
+## Period: year 
+## Rates:
+## [1] 0.01206622 0.02426577</code></pre>
+<p>Using the monthly rates 12 times or a yearly rate 1 time should produce
+the same result.</p>
+<pre class="r"><code># Change in value in two years using monthly rates
+prod(1+irc_month)</code></pre>
+<pre><code>## [1] 1.036625</code></pre>
+<pre class="r"><code># Change in value in one year using yearly rate
+prod(1+irc_year)</code></pre>
+<pre><code>## [1] 1.036625</code></pre>
+<p>The same should apply for spot rates.</p>
+<p>If the monthly curve rate does not cover full years, the last rate is assumed
+for the rest of months.</p>
+<pre class="r"><code>irc &lt;-  as_ircurve(seq(0.001, 0.011, by = 0.001))</code></pre>
+</div>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        
+
+        
+
+        
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="r4a" href="/">r4a</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="/js/jquery-1.11.3.min.js"></script>
+        <script src="/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="/js/scripts.js"></script>
+    </body>
+</html>
+

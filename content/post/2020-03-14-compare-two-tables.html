@@ -19,7 +19,7 @@ it’s useful to check how they change over a reporting period
 to understand the magnitude of movements.
 During the model development, it’s important to understand the impact
 of each of the components on the final results.</p>
-<p>The <code>compare()</code> function helps to see the differences of two tables.</p>
+<p>The <code>compare()</code> function helps to see the differences between two tables.</p>
 <pre class="r"><code>library(&quot;actuaryr&quot;)</code></pre>
 <pre class="r"><code>x &lt;- data.frame(
   v1 = c(1, 2, 3),
@@ -55,7 +55,7 @@ print(y)</code></pre>
 ## 3 -1 different the_same</code></pre>
 <p>The result of the comparison is:</p>
 <ul>
-<li>for numericals - the absolute difference,</li>
+<li>for numerical - the absolute difference,</li>
 <li>for characters - either <code>the_same</code> or <code>different</code>.</li>
 </ul>
 <p>The function prints out diagnostic messages.

@@ -5,8 +5,8 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Change an interest rates curve &middot; R for Actuaries</title>
         <meta name="description" content="Load packageTo load actuaryr package, use:
-library(actuaryr)Change type of an interest rates curveThe two common types of interest rates curve are forward and spot.With forward rates, we move along the timeline period by period.With spot rates, we jump directly from the beginning of the periodto the point on a timeline.
-Imagine an interest rates curve with yearly forward rates: 1.8%, 2%, 2.">
+library(actuaryr)Change type of interest rates curveThe two common types of interest rates curve are forward and spot.With forward rates, we move along the timeline period by period.With spot rates, we jump directly from the beginning of the period tothe point on a timeline.
+Imagine an interest rates curve with yearly forward rates: 1.8%, 2%, 2.2%.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
         <meta name="generator" content="Hugo 0.65.2" />
@@ -86,12 +86,12 @@ Imagine an interest rates curve with yearly forward rates: 1.8%, 2%, 2.">
 <p>To load <code>actuaryr</code> package, use:</p>
 <pre class="r"><code>library(actuaryr)</code></pre>
 </div>
-<div id="change-type-of-an-interest-rates-curve" class="section level1">
-<h1>Change type of an interest rates curve</h1>
+<div id="change-type-of-interest-rates-curve" class="section level1">
+<h1>Change type of interest rates curve</h1>
 <p>The two common types of interest rates curve are <strong>forward</strong> and <strong>spot</strong>.
 With <strong>forward</strong> rates, we move along the timeline period by period.
-With <strong>spot</strong> rates, we jump directly from the beginning of the period
-to the point on a timeline.</p>
+With <strong>spot</strong> rates, we jump directly from the beginning of the period to
+the point on a timeline.</p>
 <p>Imagine an interest rates curve with yearly forward rates: 1.8%, 2%, 2.2%.</p>
 <pre class="r"><code>irc_forward &lt;- as_ircurve(rates = c(0.018, 0.02, 0.022))</code></pre>
 <p>The default arguments’ values for <code>as_ircurve()</code> are
@@ -125,18 +125,17 @@ print(ircurve2)</code></pre>
 ## Rates:
 ## [1] 0.1 0.2 0.3</code></pre>
 </div>
-<div id="change-period-of-an-interest-rate-curve" class="section level1">
-<h1>Change period of an interest rate curve</h1>
+<div id="change-period-of-interest-rate-curve" class="section level1">
+<h1>Change period of interest rate curve</h1>
 <p>The interest rates are usually presented as <strong>yearly</strong> rates.
-Yearly rates tell us how much will the money be worth in a year’s time.
+Yearly rates tell us how much will the money be worth in a year.
 It’s also convenient to use <strong>monthly</strong> interest rates, because
-we receive our paychecks on a monthly basis and pay bills on a monthly basis
-as well.</p>
+we receive our paychecks monthly and pay bills monthly as well.</p>
 <p>You can change the interest rates curve from yearly to monthly and
 vice versa with <code>change_period()</code>.</p>
-<div id="from-month-to-year" class="section level2">
-<h2>From month to year</h2>
-<p>You can change the monthly rates in to yearly rates with
+<div id="from-month-to-a-year" class="section level2">
+<h2>From month to a year</h2>
+<p>You can change the monthly rates into yearly rates with
 `change_period(ircurve, to = “year”).</p>
 <pre class="r"><code>irc_month &lt;- as_ircurve(rates = c(rep(0.001, 12), rep(0.002, 12)), period = &quot;month&quot;)
 irc_year  &lt;- change_period(irc_month, to = &quot;year&quot;)</code></pre>
@@ -168,7 +167,7 @@ change_period(irc_year, to = &quot;month&quot;)</code></pre>
 ## Period: month 
 ## Rates:
 ##  [1] 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01</code></pre>
-<p>Hence, the transformation from month to year and from year to month
+<p>Hence, the transformation from month to a year and from year to month
 is <strong>not</strong> recursive, unless monthly rates are equal.</p>
 <pre class="r"><code># This curve...
 rates      &lt;- seq(0.001, 0.012, 0.001)

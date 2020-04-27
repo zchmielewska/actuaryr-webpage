@@ -19,8 +19,8 @@
       
       <guid>/2020/04/26/change-period-and-change-type-of-an-interest-rate-curve/</guid>
       <description>Load packageTo load actuaryr package, use:
-library(actuaryr)Change type of an interest rates curveThe two common types of interest rates curve are forward and spot.With forward rates, we move along the timeline period by period.With spot rates, we jump directly from the beginning of the periodto the point on a timeline.
-Imagine an interest rates curve with yearly forward rates: 1.8%, 2%, 2.</description>
+library(actuaryr)Change type of interest rates curveThe two common types of interest rates curve are forward and spot.With forward rates, we move along the timeline period by period.With spot rates, we jump directly from the beginning of the period tothe point on a timeline.
+Imagine an interest rates curve with yearly forward rates: 1.8%, 2%, 2.2%.</description>
     </item>
     
     <item>
@@ -54,7 +54,7 @@ library(&amp;quot;actuaryr&amp;quot;)The functions are:
       <guid>/2020/03/20/compare-two-tables/</guid>
       <description>UsageA big chunk of actuarial life consists of comparing stuff.
 After preparation of assumptions tables and policy data for valuation models,it’s useful to check how they change over a reporting periodto understand the magnitude of movements.During the model development, it’s important to understand the impactof each of the components on the final results.
-The compare() function helps to see the differences of two tables.</description>
+The compare() function helps to see the differences between two tables.</description>
     </item>
     
     <item>

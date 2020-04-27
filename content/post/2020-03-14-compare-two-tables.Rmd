@@ -18,7 +18,7 @@ to understand the magnitude of movements.
 During the model development, it's important to understand the impact
 of each of the components on the final results.
 
-The `compare()` function helps to see the differences of two tables.
+The `compare()` function helps to see the differences between two tables.
 
 ```{r}
 library("actuaryr")
@@ -51,7 +51,7 @@ compare(x, y)
 
 The result of the comparison is:
 
-* for numericals - the absolute difference,
+* for numerical - the absolute difference,
 * for characters - either `the_same` or `different`.
 
 The function prints out diagnostic messages. 

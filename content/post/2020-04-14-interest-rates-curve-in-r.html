@@ -1,7 +1,7 @@
 ---
 title: 'Interest rates curve with as_ircurve()'
 author: zchmielewska
-date: '2020-04-14'
+date: '2020-04-25'
 slug: interest-rates-curve-in-r
 categories: []
 tags: []
@@ -11,41 +11,46 @@ description: ''
 <script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
-<pre class="r"><code>devtools::install_github(&quot;zchmielewska/actuaryr&quot;, ref = &quot;feature/curves&quot;)</code></pre>
-<pre><code>## Skipping install of &#39;actuaryr&#39; from a github remote, the SHA1 (31188477) has not changed since last install.
-##   Use `force = TRUE` to force installation</code></pre>
 <pre class="r"><code>library(actuaryr)</code></pre>
+<div id="value-of-money" class="section level1">
+<h1>Value of money</h1>
 <p>Money changes its value in time. 10 euros today is not the same 10 euros in a year.
 Interest rates imply <strong>how</strong> the money changes its value over time.</p>
-<p>Sometimes it is reffered to an interest rate as a single number, like 2% per year.
-This implies that our EUR 10 will be EUR 10.20 after a year,
+<p>Sometimes interest rate is referred to a single number, like 2% per year.
+This approach assumes the same interest rate each year.
+Our EUR 10 will be EUR 10.20 after a year,
 EUR 10.40 after two years, EUR 10.61 etc.</p>
 <p>However, interest rates also vary in time, so it’s possible that the interest
-rates will amount to 2% in the first year and 1.8% in the second year.
-That’s why we talk about interest rates curves. The curve here implies that
-it may change over time.</p>
+rates will amount to 2% in the first year, 1.8% in the second year,
+2.1% in the third year, etc.
+That’s why we talk about interest rates <strong>curves</strong>.
+The word <strong>curve</strong> here implies that interest rates may change over time.</p>
+</div>
 <div id="components" class="section level1">
 <h1>Components</h1>
-<p>The <code>ircurve</code> is a class that represents the interest rates curve.
+<p>The <code>ircurve</code> is a class that represents an interest rates curve.
 There are three components of an interest rate curve:</p>
 <ul>
-<li>rates</li>
-<li>type</li>
-<li>period</li>
+<li>rates,</li>
+<li>type,</li>
+<li>period.</li>
 </ul>
 <p>We’ve already discussed the interest <strong>rates</strong>. These are the actual rates,
 like 2% or 1.8%.</p>
 <p>The <strong>type</strong> implies the way of accretion.
 There are two main types of interest rates: <em>forward</em> and <em>spot</em>.</p>
-<p>The <em>forward</em> rates allow us to move from one point in time to the other
-period by period.</p>
+<p>The <em>forward</em> rates allow us to move from one point in time to another
+using a period-by-period approach.</p>
 <p><img src="/post/2020-04-14-interest-rates-curve-in-r_files/ircurve1.png" /></p>
-<p>To calculate the value of money after 3 periods, use (1+f1)(1+f2)(1+f3).</p>
-<p>The <em>spot</em> rates allow us to move from the begining to the point in time
-in one step.</p>
+<p>Let’s assume that <code>f1</code> is the forward rate in the first period,
+<code>f2</code> in the second period and <code>f3</code> in the third.
+To calculate the value of 10 euros after 3 periods, use <code>10*(1+f1)*(1+f2)*(1+f3)</code>.</p>
+<p>The <em>spot</em> rates allow us to move from the beginning of the period
+to the given point in time in only one step.</p>
 <p><img src="/post/2020-04-14-interest-rates-curve-in-r_files/ircurve2.png" /></p>
-<p>To calculate the value of money after 3 periods, use (1+s3)^3.</p>
-<p>The <strong>period</strong> implies the timespan for which the interst rate should be used.
+<p>If <code>s3</code> is the spot rate for the third period,
+use <code>(1+s3)^3</code> to calculate the value of money after 3 periods.</p>
+<p>The <strong>period</strong> implies the timespan for which the interest rate should be used.
 It’s most common to model cash flows for a <em>month</em> or a <em>year</em>.</p>
 </div>
 <div id="usage" class="section level1">

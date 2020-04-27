@@ -1,60 +1,66 @@
 ---
 title: 'Interest rates curve with as_ircurve()'
 author: zchmielewska
-date: '2020-04-14'
+date: '2020-04-25'
 slug: interest-rates-curve-in-r
 categories: []
 tags: []
 description: ''
 ---
 
-```{r}
-devtools::install_github("zchmielewska/actuaryr", ref = "feature/curves")
+```{r, warning = FALSE}
 library(actuaryr)
 ```
+
+# Value of money
 
 Money changes its value in time. 10 euros today is not the same 10 euros in a year.
 Interest rates imply **how** the money changes its value over time.
 
-Sometimes it is reffered to an interest rate as a single number, like 2% per year. 
-This implies that our EUR 10 will be EUR 10.20 after a year, 
+Sometimes interest rate is referred to a single number, like 2% per year.
+This approach assumes the same interest rate each year.
+Our EUR 10 will be EUR 10.20 after a year, 
 EUR 10.40 after two years, EUR 10.61 etc.
 
 However, interest rates also vary in time, so it's possible that the interest
-rates will amount to 2% in the first year and 1.8% in the second year.
-That's why we talk about interest rates curves. The curve here implies that 
-it may change over time.
+rates will amount to 2% in the first year, 1.8% in the second year, 
+2.1% in the third year, etc.
+That's why we talk about interest rates **curves**. 
+The word **curve** here implies that interest rates may change over time.
 
 # Components
 
-The `ircurve` is a class that represents the interest rates curve.
+The `ircurve` is a class that represents an interest rates curve.
 There are three components of an interest rate curve:
 
-* rates
-* type 
-* period
+* rates,
+* type,
+* period.
 
-We've already discussed  the interest **rates**. These are the actual rates, 
+We've already discussed the interest **rates**. These are the actual rates, 
 like 2% or 1.8%. 
 
 The **type** implies the way of accretion. 
 There are two main types of interest rates: *forward* and *spot*.
 
-The *forward* rates allow us to move from one point in time to the other
-period by period.
+The *forward* rates allow us to move from one point in time to another
+using a period-by-period approach.
 
 ![](/post/2020-04-14-interest-rates-curve-in-r_files/ircurve1.png)
 
-To calculate the value of money after 3 periods, use (1+f1)(1+f2)(1+f3).
+Let's assume that `f1` is the forward rate in the first period, 
+`f2` in the second period and `f3` in the third.
+To calculate the value of 10 euros after 3 periods, use `10*(1+f1)*(1+f2)*(1+f3)`.
 
-The *spot* rates allow us to move from the begining to the point in time 
-in one step.
+The *spot* rates allow us to move from the beginning of the period 
+to the given point in time in only one step.
 
 ![](/post/2020-04-14-interest-rates-curve-in-r_files/ircurve2.png)
 
-To calculate the value of money after 3 periods, use (1+s3)^3.
+If `s3` is the spot rate for the third period, 
+use `(1+s3)^3` to calculate the value of money after 3 periods.
 
-The **period** implies the timespan for which the interst rate should be used.
+The **period** implies the timespan for which the interest rate should be used.
 It's most common to model cash flows for a *month* or a *year*.
 
 # Usage

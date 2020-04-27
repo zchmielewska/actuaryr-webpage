@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Interest rates curve with as_ircurve() &middot; R for Actuaries</title>
+        <meta name="description" content="library(actuaryr)Value of moneyMoney changes its value in time. 10 euros today is not the same 10 euros in a year.Interest rates imply how the money changes its value over time.
+Sometimes interest rate is referred to a single number, like 2% per year.This approach assumes the same interest rate each year.Our EUR 10 will be EUR 10.20 after a year,EUR 10.40 after two years, EUR 10.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.65.2" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" href="/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+    </head>
+    <body>
+        
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="r4a" href="/">r4a</a>
+                            </h1>
+                        
+                        <a class="button-square" href="/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:zchmielewska%20[at]%20gmail">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Interest rates curve with as_ircurve()</h1>
+    
+    <p class="post-date post-line">
+        <span>Published <time datetime="2020-04-27" itemprop="datePublished">2020-04-27</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">zchmielewska</a>
+            </span>
+        </span>
+    </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<pre class="r"><code>library(actuaryr)</code></pre>
+<div id="value-of-money" class="section level1">
+<h1>Value of money</h1>
+<p>Money changes its value in time. 10 euros today is not the same 10 euros in a year.
+Interest rates imply <strong>how</strong> the money changes its value over time.</p>
+<p>Sometimes interest rate is referred to a single number, like 2% per year.
+This approach assumes the same interest rate each year.
+Our EUR 10 will be EUR 10.20 after a year,
+EUR 10.40 after two years, EUR 10.61 etc.</p>
+<p>However, interest rates also vary in time, so it’s possible that the interest
+rates will amount to 2% in the first year, 1.8% in the second year,
+2.1% in the third year, etc.
+That’s why we talk about interest rates <strong>curves</strong>.
+The word <strong>curve</strong> here implies that interest rates may change over time.</p>
+</div>
+<div id="components" class="section level1">
+<h1>Components</h1>
+<p>The <code>ircurve</code> is a class that represents an interest rates curve.
+There are three components of an interest rate curve:</p>
+<ul>
+<li>rates,</li>
+<li>type,</li>
+<li>period.</li>
+</ul>
+<p>We’ve already discussed the interest <strong>rates</strong>. These are the actual rates,
+like 2% or 1.8%.</p>
+<p>The <strong>type</strong> implies the way of accretion.
+There are two main types of interest rates: <em>forward</em> and <em>spot</em>.</p>
+<p>The <em>forward</em> rates allow us to move from one point in time to another
+using a period-by-period approach.</p>
+<p><img src="/post/2020-04-14-interest-rates-curve-in-r_files/ircurve1.png" /></p>
+<p>Let’s assume that <code>f1</code> is the forward rate in the first period,
+<code>f2</code> in the second period and <code>f3</code> in the third.
+To calculate the value of 10 euros after 3 periods, use <code>10*(1+f1)*(1+f2)*(1+f3)</code>.</p>
+<p>The <em>spot</em> rates allow us to move from the beginning of the period
+to the given point in time in only one step.</p>
+<p><img src="/post/2020-04-14-interest-rates-curve-in-r_files/ircurve2.png" /></p>
+<p>If <code>s3</code> is the spot rate for the third period,
+use <code>(1+s3)^3</code> to calculate the value of money after 3 periods.</p>
+<p>The <strong>period</strong> implies the timespan for which the interest rate should be used.
+It’s most common to model cash flows for a <em>month</em> or a <em>year</em>.</p>
+</div>
+<div id="usage" class="section level1">
+<h1>Usage</h1>
+<p>To create an interest rates curve in R, you can use <code>as_ircurve()</code>.</p>
+<pre class="r"><code>rates &lt;- c(0.018, 0.02)
+my_ircurve &lt;- as_ircurve(rates, type = &quot;forward&quot;, period = &quot;year&quot;)</code></pre>
+<p>This creates an interest rates curve with forward rates per year.
+The rate for the first year is 1.8% and the rate for the second year is 2.0%.</p>
+<pre class="r"><code>print(my_ircurve)</code></pre>
+<pre><code>## Interest rate curve
+## Type:   forward 
+## Period: year 
+## Rates:
+## [1] 0.018 0.020</code></pre>
+</div>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        
+
+        
+
+        
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="r4a" href="/">r4a</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="/js/jquery-1.11.3.min.js"></script>
+        <script src="/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="/js/scripts.js"></script>
+    </body>
+</html>
+

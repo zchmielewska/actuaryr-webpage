@@ -1,42 +1,139 @@
 ---
-title: change_type() and change_period() of an interest rate curve
+title: Change an interest rates curve
 author: zchmielewska
-date: '2020-04-20'
+date: '2020-04-26'
 slug: change-period-and-change-type-of-an-interest-rate-curve
 categories: []
 tags: []
 description: ''
 ---
+# Load package
 
+To load `actuaryr` package, use:
 ```{r}
-devtools::install_github("zchmielewska/actuaryr")
 library(actuaryr)
 ```
 
 # Change type of an interest rates curve
 
 The two common types of interest rates curve are **forward** and **spot**.
+With **forward** rates, we move along the timeline period by period.
+With **spot** rates, we jump directly from the beginning of the period 
+to the point on a timeline.
 
-With forward rates, we move along the timeline period by period.
-With spot rates, we jump directly from the beginning to the given period.
+Imagine an interest rates curve with yearly forward rates: 1.8%, 2%, 2.2%.
 
-Imagine an interest rates curve with yearly rates: 1.8%, 2%, 2.2%.
 
 ```{r}
-irc_forward <- as_ircurve(rates = c(0.018, 0.02, 0.022), type = "forward")
+irc_forward <- as_ircurve(rates = c(0.018, 0.02, 0.022))
+```
+
+The default arguments' values for `as_ircurve()` are 
+`type = "forward"` and `period = "year"`.
+
+```{r}
 print(irc_forward)
 ```
 
-The value of 100 after 3 years amounts to:
+The value of `100` after 3 years amounts to 106.12.
 
 ```{r}
-100*prod(1+irc_forward)
+100 * prod(1 + irc_forward)
 ```
 
-The forward rates can be changed to spot rates with `change_type()`.
+The **forward** rates can be changed to **spot** rates with `change_type()`.
 
 ```{r}
 irc_spot <- change_type(irc_forward, to = "spot")
 ```
 
+The value of 100 after 3 years using **spot** rates amounts to 106.12 as well.
+
+```{r}
+100 * (1 + irc_spot[3])^3
+```
+
+The process of changing the curve's type is *recursive*. 
+If you change the type from **forward** to **spot** 
+and then from **spot** to **forward**, you'll receive the same curve.
+
+```{r, warning = FALSE}
+# Let's import the pipe (%>%) from magrittr
+library(magrittr)
+
+ircurve1 <- as_ircurve(c(0.1, 0.2, 0.3))
+ircurve2 <- ircurve1 %>% change_type(to = "spot") %>% change_type(to = "forward")
+print(ircurve2)
+
+```
+
+# Change period of an interest rate curve
+
+The interest rates are usually presented as **yearly** rates. 
+Yearly rates tell us how much will the money be worth in a year's time.
+It's also convenient to use **monthly** interest rates, because
+we receive our paychecks on a monthly basis and pay bills on a monthly basis
+as well.
+
+You can change the interest rates curve from yearly to monthly and 
+vice versa with `change_period()`.
+
+## From month to year
+
+You can change the monthly rates in to yearly rates with 
+`change_period(ircurve, to = "year").
+
+```{r}
+irc_month <- as_ircurve(rates = c(rep(0.001, 12), rep(0.002, 12)), period = "month")
+irc_year  <- change_period(irc_month, to = "year")
+```
+
+With monthly rates, you gain 3.66 on 100 after two years.
+
+```{r}
+# Change in value in two years using monthly rates
+100 * prod(1 + irc_month)
+```
+
+With yearly rates, too!
+
+```{r}
+# Change in value in one year using yearly rate
+100 * prod(1 + irc_year)
+```
+
+If the monthly curve does not cover the whole year, the remaining part is filled
+with **the last** monthly rate.
+
+```{r, warning = FALSE}
+# This transformation...
+rates1     <- seq(0.001, 0.009, 0.001)
+irc_month1 <- as_ircurve(rates1, period = "month")
+irc_year1  <- change_period(irc_month1, to = "year")
+
+# ...is equivalent to this transformation.
+rates2     <- c(seq(0.001, 0.009, 0.001), rep(0.009, 3))
+irc_month2 <- as_ircurve(rates2, period = "month")
+irc_year2  <- change_period(irc_month2, to = "year")
+```
+
+The change from **year** to **month** assumes that monthly rates within a year
+are equal.
+
+```{r}
+irc_year <- as_ircurve(rates = (1+0.01)^12-1)
+change_period(irc_year, to = "month")
+```
+
+Hence, the transformation from month to year and from year to month
+is **not** recursive, unless monthly rates are equal.
+
+```{r}
+# This curve...
+rates      <- seq(0.001, 0.012, 0.001)
+irc_month1 <- as_ircurve(rates, period = "month")
+
+# ...is different than this curve
+irc_month2 <- irc_month1 %>% change_period(to = "year") %>% change_period(to = "month")
+```
 

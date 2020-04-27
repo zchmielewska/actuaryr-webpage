@@ -7,28 +7,30 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>zchmielewska</copyright>
-    <lastBuildDate>Mon, 20 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 26 Apr 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>change_period() and change_type() of an interest rate curve</title>
-      <link>/2020/04/20/change-period-and-change-type-of-an-interest-rate-curve/</link>
-      <pubDate>Mon, 20 Apr 2020 00:00:00 +0000</pubDate>
+      <title>Change an interest rates curve</title>
+      <link>/2020/04/26/change-period-and-change-type-of-an-interest-rate-curve/</link>
+      <pubDate>Sun, 26 Apr 2020 00:00:00 +0000</pubDate>
       
-      <guid>/2020/04/20/change-period-and-change-type-of-an-interest-rate-curve/</guid>
-      <description></description>
+      <guid>/2020/04/26/change-period-and-change-type-of-an-interest-rate-curve/</guid>
+      <description>Load packageTo load actuaryr package, use:
+library(actuaryr)Change type of an interest rates curveThe two common types of interest rates curve are forward and spot.With forward rates, we move along the timeline period by period.With spot rates, we jump directly from the beginning of the periodto the point on a timeline.
+Imagine an interest rates curve with yearly forward rates: 1.8%, 2%, 2.</description>
     </item>
     
     <item>
       <title>Interest rates curve with as_ircurve()</title>
-      <link>/2020/04/14/interest-rates-curve-in-r/</link>
-      <pubDate>Tue, 14 Apr 2020 00:00:00 +0000</pubDate>
+      <link>/2020/04/25/interest-rates-curve-in-r/</link>
+      <pubDate>Sat, 25 Apr 2020 00:00:00 +0000</pubDate>
       
-      <guid>/2020/04/14/interest-rates-curve-in-r/</guid>
-      <description>devtools::install_github(&amp;quot;zchmielewska/actuaryr&amp;quot;, ref = &amp;quot;feature/curves&amp;quot;)## Skipping install of &amp;#39;actuaryr&amp;#39; from a github remote, the SHA1 (31188477) has not changed since last install.## Use `force = TRUE` to force installationlibrary(actuaryr)Money changes its value in time. 10 euros today is not the same 10 euros in a year.Interest rates imply how the money changes its value over time.
-Sometimes it is reffered to an interest rate as a single number, like 2% per year.</description>
+      <guid>/2020/04/25/interest-rates-curve-in-r/</guid>
+      <description>library(actuaryr)Value of moneyMoney changes its value in time. 10 euros today is not the same 10 euros in a year.Interest rates imply how the money changes its value over time.
+Sometimes interest rate is referred to a single number, like 2% per year.This approach assumes the same interest rate each year.Our EUR 10 will be EUR 10.20 after a year,EUR 10.40 after two years, EUR 10.</description>
     </item>
     
     <item>

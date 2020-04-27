@@ -8,7 +8,7 @@ tags: []
 description: ''
 ---
 
-# Usage
+# Usage 
 
 A big chunk of actuarial life consists of comparing stuff.
 

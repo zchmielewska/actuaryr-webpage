@@ -4,12 +4,12 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>compare() two tables &middot; R for Actuaries</title>
-        <meta name="description" content="UsageA big chunk of actuarial life consists of comparing stuff.
-After preparation of assumptions tables and policy data for valuation models,it’s useful to check how they change over a reporting periodto understand the magnitude of movements.During the model development, it’s important to understand the impactof each of the components on the final results.
-The compare() function helps to see the differences of two tables.">
+        <meta name="description" content="A big chunk of actuarial life consists of comparing things.
+After preparing assumptions tables and policy data for valuation models,it’s useful to check how they change over a reporting periodto understand the magnitude of movements and for overall sense-check.
+Also during the model development, it’s important to understand the impactof the development on the results.The regression analysis helps to understand the impact of each step.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.67.1" />
+        <meta name="generator" content="Hugo 0.65.2" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
@@ -41,10 +41,6 @@ The compare() function helps to see the differences of two tables.">
                         
                         
                         
-                        
-                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:zchmielewska%20[at]%20gmail">
-                                <i class="fa fa-envelope"></i>
-                            </a>
                         
                     </div>
 
@@ -82,72 +78,42 @@ The compare() function helps to see the differences of two tables.">
     
 
     
-
-
-<div id="usage" class="section level1">
-<h1>Usage</h1>
-<p>A big chunk of actuarial life consists of comparing stuff.</p>
-<p>After preparation of assumptions tables and policy data for valuation models,
+<p>A big chunk of actuarial life consists of comparing things.</p>
+<p>After preparing assumptions tables and policy data for valuation models,
 it’s useful to check how they change over a reporting period
-to understand the magnitude of movements.
-During the model development, it’s important to understand the impact
-of each of the components on the final results.</p>
-<p>The <code>compare()</code> function helps to see the differences of two tables.</p>
-<pre class="r"><code>library(&quot;actuaryr&quot;)</code></pre>
-<pre class="r"><code>x &lt;- data.frame(
-  v1 = c(1, 2, 3),
-  v2 = c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;),
-  v4 = c(10, 10, 10),
-  stringsAsFactors = FALSE
-)
-print(x)</code></pre>
-<pre><code>##   v1 v2 v4
-## 1  1  a 10
-## 2  2  b 10
-## 3  3  c 10</code></pre>
-<pre class="r"><code>y &lt;- data.frame(
-  v1 = c(1, 2, 4, 5),
-  v2 = c(&quot;a&quot;, &quot;b&quot;, &quot;d&quot;, &quot;e&quot;),
-  v3 = c(6, 7, 8, 9),
-  v4 = c(&quot;10&quot;, &quot;10&quot;, &quot;10&quot;, &quot;10&quot;),
-  stringsAsFactors = FALSE
-)
-print(y)</code></pre>
-<pre><code>##   v1 v2 v3 v4
-## 1  1  a  6 10
-## 2  2  b  7 10
-## 3  4  d  8 10
-## 4  5  e  9 10</code></pre>
-<pre class="r"><code>compare(x, y)</code></pre>
-<pre><code>## Column(s) &#39;v3&#39; are not in LHS so they have been removed from the comparison.
-## RHS has more rows than LHS. The last 1 row(s) of RHS have been removed.
-## Column &#39;v4&#39; in LHS has been coerced from double to character.</code></pre>
-<pre><code>##   v1        v2       v4
-## 1  0  the_same the_same
-## 2  0  the_same the_same
-## 3 -1 different the_same</code></pre>
-<p>The result of the comparison is:</p>
-<ul>
-<li>for numericals - the absolute difference,</li>
-<li>for characters - either <code>the_same</code> or <code>different</code>.</li>
-</ul>
-<p>The function prints out diagnostic messages.
-These diagnostic messages result from the approach taken for the comparison.
-The approach is described in the next section.</p>
-</div>
-<div id="comparison-approach" class="section level1">
-<h1>Comparison approach</h1>
-<p><code>compare()</code> uses the following approach:</p>
+to understand the magnitude of movements and for overall sense-check.</p>
+<p>Also during the model development, it’s important to understand the impact
+of the development on the results.
+The regression analysis helps to understand the impact of each step.</p>
+<div id="methodology" class="section level2">
+<h2>Methodology</h2>
+<p>The overall methodology of the comparison in <code>compoare()</code>:</p>
 <ol style="list-style-type: decimal">
-<li>Only common columns are compared.</li>
-<li>Only common rows are compared.</li>
-<li>Columns are coerced to common types.</li>
+<li>Only common columns of the two data frames are compared.
+The rest of the columns are ignored for the comparison.</li>
+<li>Only common rows of the two data frames are compared.
+If one data frame has more rows, the extra rows are removed
+from the comparison.</li>
+<li>If the same columns have different types between the two tables,
+the weaker type gets coerced to the stronger type.
+The order of strength: logical &lt; integer &lt; double &lt; character.</li>
+<li>The comparison depends on the type:
+for numericals the absolute difference is returned,
+for characters either <code>the_same</code> or <code>different</code> is returned.</li>
+<li>Factor, POSIXct and Date classes are coerced to characters.</li>
 </ol>
-<p>Let’s see some examples of this behaviour.</p>
-<div id="example-1---common-columns" class="section level2">
-<h2>Example 1 - common columns</h2>
-<p>Only common columns of the two data frames are compared.
-The rest of the columns is ignored for the comparison.</p>
+<p>Let’s see some examples.</p>
+<p>The <code>compare()</code> function helps to compare two data frames.
+The function can be loaded using:</p>
+<pre class="r"><code>devtools::install_github(&quot;zchmielewska/actuaryr&quot;, ref = &quot;dev&quot;)</code></pre>
+<pre><code>## Error in utils::download.file(url, path, method = method, quiet = quiet,  : 
+##   cannot open URL &#39;https://api.github.com/repos/zchmielewska/actuaryr/tarball/dev&#39;</code></pre>
+<pre class="r"><code>library(actuaryr)</code></pre>
+</div>
+<div id="example-1" class="section level2">
+<h2>Example 1</h2>
+<p>LHS:</p>
+
 <pre class="r"><code>print(x)</code></pre>
 <pre><code>##   v1 v2
 ## 1  1  a

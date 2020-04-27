@@ -7,7 +7,9 @@ categories: []
 tags: []
 description: ''
 ---
+# Load package
 
+To load `actuaryr` package, use:
 ```{r, warning = FALSE}
 library(actuaryr)
 ```

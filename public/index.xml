@@ -8,6 +8,7 @@
     <language>en-us</language>
     <copyright>zchmielewska</copyright>
     <lastBuildDate>Sun, 26 Apr 2020 00:00:00 +0000</lastBuildDate>
+
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
@@ -18,8 +19,15 @@
       <pubDate>Sun, 26 Apr 2020 00:00:00 +0000</pubDate>
       
       <guid>/2020/04/26/change-period-and-change-type-of-an-interest-rate-curve/</guid>
-      <description>Load packageTo load actuaryr package, use:
-library(actuaryr)Change type of an interest rates curveThe two common types of interest rates curve are forward and spot.With forward rates, we move along the timeline period by period.With spot rates, we jump directly from the beginning of the periodto the point on a timeline.
+      <description>Load package
+To load actuaryr package, use:
+library(actuaryr)
+
+Change type of an interest rates curve
+The two common types of interest rates curve are forward and spot.
+With forward rates, we move along the timeline period by period.
+With spot rates, we jump directly from the beginning of the period
+to the point on a timeline.
 Imagine an interest rates curve with yearly forward rates: 1.8%, 2%, 2.</description>
     </item>
     
@@ -29,8 +37,14 @@ Imagine an interest rates curve with yearly forward rates: 1.8%, 2%, 2.</descrip
       <pubDate>Sat, 25 Apr 2020 00:00:00 +0000</pubDate>
       
       <guid>/2020/04/25/interest-rates-curve-in-r/</guid>
-      <description>library(actuaryr)Value of moneyMoney changes its value in time. 10 euros today is not the same 10 euros in a year.Interest rates imply how the money changes its value over time.
-Sometimes interest rate is referred to a single number, like 2% per year.This approach assumes the same interest rate each year.Our EUR 10 will be EUR 10.20 after a year,EUR 10.40 after two years, EUR 10.</description>
+      <description>library(actuaryr)
+Value of money
+Money changes its value in time. 10 euros today is not the same 10 euros in a year.
+Interest rates imply how the money changes its value over time.
+Sometimes interest rate is referred to a single number, like 2% per year.
+This approach assumes the same interest rate each year.
+Our EUR 10 will be EUR 10.20 after a year,
+EUR 10.40 after two years, EUR 10.</description>
     </item>
     
     <item>
@@ -40,19 +54,50 @@ Sometimes interest rate is referred to a single number, like 2% per year.This a
       
       <guid>/2020/03/14/compare-two-tables/</guid>
       <description>A big chunk of actuarial life consists of comparing things.
-After preparing assumptions tables and policy data for valuation models,it’s useful to check how they change over a reporting periodto understand the magnitude of movements and for overall sense-check.
-Also during the model development, it’s important to understand the impactof the development on the results.The regression analysis helps to understand the impact of each step.</description>
+After preparing assumptions tables and policy data for valuation models,
+it’s useful to check how they change over a reporting period
+to understand the magnitude of movements and for overall sense-check.
+Also during the model development, it’s important to understand the impact
+of the development on the results.
+The regression analysis helps to understand the impact of each step.</description>
+
     </item>
     
     <item>
-      <title>Easily refer to a reporting date</title>
+      <title>compare() two tables</title>
+      <link>/2020/03/20/compare-two-tables/</link>
+      <pubDate>Fri, 20 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/03/20/compare-two-tables/</guid>
+      <description>Usage
+A big chunk of actuarial life consists of comparing stuff.
+After preparation of assumptions tables and policy data for valuation models,
+it’s useful to check how they change over a reporting period
+to understand the magnitude of movements.
+During the model development, it’s important to understand the impact
+of each of the components on the final results.
+The compare() function helps to see the differences of two tables.</description>
+    </item>
+    
+    <item>
+      <title>Reference dates within the period</title>
       <link>/2020/02/29/refer-to-a-date/</link>
       <pubDate>Sat, 29 Feb 2020 00:00:00 +0000</pubDate>
       
       <guid>/2020/02/29/refer-to-a-date/</guid>
-      <description>InstallationThe functions described in this post are included in the actuaryr package.
-library(actuaryr)Date reference functionsPurposeFirst and last days of months, quarters and years are of special meaningfor business reporting.
-The business reports are usually created for the last day of some period,like a month or a year.They enclose data for the first day of this period up to the last.If you create your report in the middle of the period,you may need to quickly refer to these dates.</description>
+      <description>Installation
+The functions described in this post are included in the actuaryr package.
+library(&amp;quot;actuaryr&amp;quot;)
+
+Date reference functions
+Purpose
+First and last days of months, quarters and years are of special meaning
+for business reporting.
+The business reports are usually created for the last day of some period,
+like a month or a year.
+They enclose data for the first day of this period up to the last.
+If you create your report in the middle of the period,
+you may need to quickly refer to these dates.</description>
     </item>
     
     <item>
@@ -61,9 +106,14 @@ The business reports are usually created for the last day of some period,like a
       <pubDate>Mon, 24 Feb 2020 00:00:00 +0000</pubDate>
       
       <guid>/2020/02/24/why-r-for-actuaries/</guid>
-      <description>The actuarial reporting processThe process of life insurance actuarial reporting consists of several steps.Various IT tools are used in different areas.
+      <description>The actuarial reporting process
+The process of life insurance actuarial reporting consists of several steps.
+Various IT tools are used in different areas.
 The actuarial reporting process can be divided into the following areas:
-For valuation models, specialized software is used, such as Prophet or RAFM.I don’t think R can easily replace them.Valuation models consist of a vast amount of variables that interact with each other.It’s not comfortable to work with a big amount of interrelated variables in R.</description>
+For valuation models, specialized software is used, such as Prophet or RAFM.
+I don’t think R can easily replace them.
+Valuation models consist of a vast amount of variables that interact with each other.
+It’s not comfortable to work with a big amount of interrelated variables in R.</description>
     </item>
     
     <item>

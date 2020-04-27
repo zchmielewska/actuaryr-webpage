@@ -1,5 +1,5 @@
 ---
-title: Easily refer to a reporting date
+title: Reference dates within the period
 author: zchmielewska
 date: '2020-02-29'
 slug: refer-to-a-date
@@ -13,7 +13,7 @@ description: ''
 The functions described in this post are included in the `actuaryr` package.
 
 ```{r}
-library(actuaryr)
+library("actuaryr")
 ```
 
 # Date reference functions

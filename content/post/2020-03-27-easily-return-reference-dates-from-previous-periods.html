@@ -1,0 +1,50 @@
+---
+title: Reference dates from the previous period
+author: zchmielewska
+date: '2020-03-26'
+slug: easily-return-reference-dates-from-previous-periods
+categories: []
+tags: []
+description: ''
+---
+
+
+
+<div id="usage" class="section level1">
+<h1>Usage</h1>
+<p>The functions return the last day of the previous month, quarter or year.
+These functions might be of use if you are preparing, for example,
+the results for the first quarter of 2020 (Q1 2020) and want to compare them
+against the year-end results (YE 2019).</p>
+<p>You can load the package with:</p>
+<pre class="r"><code>library(&quot;actuaryr&quot;)</code></pre>
+<p>The functions are:</p>
+<ul>
+<li><code>dref_mtd()</code> - returns month-to-date</li>
+<li><code>dref_qtd()</code> - returns quarter-to-date</li>
+<li><code>dref_ytd()</code> - returns year-to-date</li>
+</ul>
+<p><code>dref_mtd()</code>, <code>dref_qtd()</code> and <code>dref_ytd()</code> always return the last day
+of the preceding time period (rather than the last working day).</p>
+<p>In the images below, the base dates have been marked with orange
+and the reference dates have been marked with green.</p>
+<div id="month-to-date" class="section level2">
+<h2>Month-to-date</h2>
+<pre class="r"><code>dref_mtd(&quot;2020-02-14&quot;)</code></pre>
+<pre><code>## [1] &quot;2020-01-31&quot;</code></pre>
+<p><img src="/post/2020-03-27-easily-return-reference-dates-from-previous-periods_files/dref_mtd.png" /></p>
+<div id="quarter-to-date" class="section level3">
+<h3>Quarter-to-date</h3>
+<pre class="r"><code>dref_qtd(&quot;2020-05-24&quot;)</code></pre>
+<pre><code>## [1] &quot;2020-03-31&quot;</code></pre>
+<p><img src="/post/2020-03-27-easily-return-reference-dates-from-previous-periods_files/dref_qtd.png" /></p>
+</div>
+<div id="year-to-date" class="section level3">
+<h3>Year-to-date</h3>
+<pre class="r"><code>dref_ytd(&quot;2020-09-21&quot;)</code></pre>
+<pre><code>## [1] &quot;2019-12-31&quot;</code></pre>
+<p><img src="/post/2020-03-27-easily-return-reference-dates-from-previous-periods_files/dref_ytd.png" /></p>
+<p>In case of any bugs, <a href="https://github.com/zchmielewska/actuaryr/issues">raise an issue</a>.</p>
+</div>
+</div>
+</div>

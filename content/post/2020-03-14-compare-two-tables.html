@@ -1,15 +1,12 @@
 ---
-title: Compare two tables with compare()
+title: compare() two tables
 author: zchmielewska
-date: '2020-03-14'
+date: '2020-03-20'
 slug: compare-two-tables
 categories: []
 tags: []
 description: ''
 ---
-
-<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
-
 
 <p>A big chunk of actuarial life consists of comparing things.</p>
 <p>After preparing assumptions tables and policy data for valuation models,
@@ -46,95 +43,68 @@ The function can be loaded using:</p>
 <div id="example-1" class="section level2">
 <h2>Example 1</h2>
 <p>LHS:</p>
+
 <pre class="r"><code>print(x)</code></pre>
 <pre><code>##   v1 v2
 ## 1  1  a
 ## 2  2  b
 ## 3  3  c</code></pre>
-<p>RHS:</p>
 <pre class="r"><code>print(y)</code></pre>
-<pre><code>##   v1 v2
-## 1  1  a
-## 2  2  c
-## 3  2  c</code></pre>
-<p>Result:</p>
+<pre><code>##   v1 v3
+## 1  1  d
+## 2  2  e
+## 3  2  f</code></pre>
 <pre class="r"><code>compare(x, y)</code></pre>
-<pre><code>##   v1        v2
-## 1  0  the_same
-## 2  0 different
-## 3  1  the_same</code></pre>
-<p>For numericals, the function returns the absolute difference.
-RHS is substracted from LHS.
-For characters, the function returns either <code>the_same</code>,
-if the two values are equal, or <code>different</code> otherwise.</p>
+<pre><code>## Column(s) &#39;v3&#39; are not in LHS so they have been removed from the comparison.
+## Column(s) &#39;v2&#39; are not in RHS so they have been removed from the comparison.</code></pre>
+<pre><code>##   v1
+## 1  0
+## 2  0
+## 3  1</code></pre>
+<p>Only <code>v1</code> is a common column between the two tables,
+so the rest of the columns (<code>v2</code> in LHS and <code>v3</code> in RHS) has been ignored.</p>
 </div>
-<div id="example-2" class="section level2">
-<h2>Example 2</h2>
-<p>LHS:</p>
-<pre class="r"><code>print(x)</code></pre>
-<pre><code>##   v1 v2 v3
-## 1  1  a  4
-## 2  2  b  5
-## 3  3  c  6</code></pre>
-<p>RHS:</p>
-<pre class="r"><code>print(y)</code></pre>
-<pre><code>##   v1 v2
-## 1  1  a
-## 2  2  c
-## 3  2  c</code></pre>
-<p>Result:</p>
-<pre class="r"><code>compare(x, y)</code></pre>
-<pre><code>## Column(s) &#39;v3&#39; are not in RHS so they have been removed from the comparison.</code></pre>
-<pre><code>##   v1        v2
-## 1  0  the_same
-## 2  0 different
-## 3  1  the_same</code></pre>
-<p>The diagnostic message informs that there is no column <code>v3</code> in the second table,
-so this column has been removed from the comparison. Only columns <code>v1</code> and <code>v2</code>
-are compared.</p>
-</div>
-<div id="example-3" class="section level2">
-<h2>Example 3</h2>
-<p>LHS:</p>
+<div id="example-2---common-rows" class="section level2">
+<h2>Example 2 - common rows</h2>
+<p>Only common rows of the two data frames are compared.
+If one data frame has more rows, the extra rows are removed for the comparison.</p>
 <pre class="r"><code>print(x)</code></pre>
 <pre><code>##   v1 v2
 ## 1  1  a
 ## 2  2  b
 ## 3  3  c</code></pre>
-<p>RHS:</p>
 <pre class="r"><code>print(y)</code></pre>
 <pre><code>##   v1 v2
 ## 1  1  a
 ## 2  2  c</code></pre>
-<p>Result:</p>
 <pre class="r"><code>compare(x, y)</code></pre>
 <pre><code>## LHS has more rows than RHS. The last 1 row(s) of LHS have been removed.</code></pre>
 <pre><code>##   v1        v2
 ## 1  0  the_same
 ## 2  0 different</code></pre>
-<p>The diagnostic messages concern the issue that
-there are 2 rows in the second table and 3 rows in the first table.
-The 3rd row in the first table has been removed for the comparison.
-Only the first 2 rows of both tables are compared.</p>
+<p>The diagnostic message concerns the issue that
+there are 3 rows in LHS and only 2 rows in RHS.
+The 3<sup>rd</sup> row in LHS has been removed for the comparison.
+Only the first 2 rows are compared.</p>
 </div>
-<div id="example-4" class="section level2">
-<h2>Example 4</h2>
-<p>LHS:</p>
+<div id="example-3---common-types" class="section level2">
+<h2>Example 3 - common types</h2>
+<p>If the same columns have different types between the two tables,
+the weaker type gets coerced to the stronger type.</p>
+<p>Strength order: logical &lt; integer &lt; double &lt; character.</p>
 <pre class="r"><code>str(x)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    2 obs. of  1 variable:
-##  $ v1: num  1 2</code></pre>
-<p>RHS:</p>
+<pre><code>## &#39;data.frame&#39;:    3 obs. of  1 variable:
+##  $ v1: num  1 2 3</code></pre>
 <pre class="r"><code>str(y)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    2 obs. of  1 variable:
-##  $ v1: chr  &quot;1&quot; &quot;2&quot;</code></pre>
-<p>Result:</p>
+<pre><code>## &#39;data.frame&#39;:    3 obs. of  1 variable:
+##  $ v1: chr  &quot;1&quot; &quot;2&quot; &quot;3&quot;</code></pre>
 <pre class="r"><code>compare(x, y)</code></pre>
 <pre><code>## Column &#39;v1&#39; in LHS has been coerced from double to character.</code></pre>
 <pre><code>##         v1
 ## 1 the_same
-## 2 the_same</code></pre>
-<p>Columns with weaker types are coerced to columns with stronger types.</p>
-<p>In this example, the <code>v1</code> column in the first table is a double and
-in the second table it’s a character.
-For comparison, the <code>v1</code> column in the first table is coerced to a character.</p>
+## 2 the_same
+## 3 the_same</code></pre>
+<p>The <code>v1</code> column in LHS is a double and in RHS a character.
+For comparison, the <code>v1</code> column LHS is coerced to a character.</p>
+</div>
 </div>

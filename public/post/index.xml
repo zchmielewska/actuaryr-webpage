@@ -7,10 +7,23 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>zchmielewska</copyright>
-    <lastBuildDate>Sun, 26 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 27 Feb 2021 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Finding an optimal friend with lpSolve::lp()</title>
+      <link>/2021/02/27/finding-an-optimal-friend-with-lpsolvelp/</link>
+      <pubDate>Sat, 27 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/02/27/finding-an-optimal-friend-with-lpsolvelp/</guid>
+      <description>The lpSolve package is an excellent tool for optimization problems.
+In this post, we will use lpSolve::lp() to find an optimal friend.
+The problemImagine four people: Alice, Ben, Charlie and Donna.
+The values in the matrix below reflect how alike they are on a scale from 1 to 10.
+participants &amp;lt;- c(&amp;quot;Alice&amp;quot;, &amp;quot;Ben&amp;quot;, &amp;quot;Charlie&amp;quot;, &amp;quot;Donna&amp;quot;)n = length(participants)data = c(10, 7, 8, 2, 7, 10, 3, 4,8, 3, 10, 6,2, 4, 6, 10)scores_matrix &amp;lt;- matrix(data = data, nrow = n, dimnames = list(participants, participants))print(scores_matrix)## Alice Ben Charlie Donna## Alice 10 7 8 2## Ben 7 10 3 4## Charlie 8 3 10 6## Donna 2 4 6 10For example, Alice and Charlie have a lot in common, so their score is 8.</description>
+    </item>
     
     <item>
       <title>Change an interest rates curve</title>

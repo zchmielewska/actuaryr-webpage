@@ -1,0 +1,232 @@
+---
+title: "Finding an optimal friend with lpSolve::lp()"
+author: "zchmielewska"
+date: '2021-02-27'
+description: ''
+math: true
+slug: finding-an-optimal-friend-with-lpsolvelp
+tags: []
+categories: []
+---
+
+The `lpSolve` package is an excellent tool for optimization problems. 
+
+In this post, we will use `lpSolve::lp()` to find an optimal friend.
+
+# The problem
+
+Imagine four people: Alice, Ben, Charlie and Donna. 
+
+The values in the matrix below reflect how alike they are on a scale from 1 to 10.
+
+```{r}
+
+participants <- c("Alice", "Ben", "Charlie", "Donna")
+
+n = length(participants)
+
+data = c(10, 7, 8, 2, 
+         7, 10, 3, 4,
+         8, 3, 10, 6,
+         2, 4, 6, 10)
+
+scores_matrix <- matrix(data = data, nrow = n, dimnames = list(participants, participants))
+
+print(scores_matrix)
+
+```
+
+For example, Alice and Charlie have a lot in common, so their score is 8. 
+The score of Charlie and Ben is only 3 because they don't share many interests. 
+
+Our goal is to connect these 4 people into pairs, in a way that the total score is maximal.
+
+We could start with matching Alice with Charlie because their score is the highest (8 points). 
+Then we need to match Ben with Donna who have 4 points.
+The total score would be *12* points.
+
+However, there is a solution that gains a better score. 
+If we connect Alice with Ben (7 points) and Charlie with Donna (6 points), the total score is *13* points.
+
+How to find the best matches mathematically?
+
+# Optimization
+
+## Objective
+
+Let's notice that the scores' matrix is symmetrical. The score of Alice and Charlie is the same as the score of Charlie and Alice.
+
+Values on the diagonal are all 10's because people know themselves the best. However, we want to connect each person with somebody else, so we can ignore the diagonal.
+
+The scores' matrix can be limited to either lower or upper triangular.
+
+```{r}
+lower_triangular <- lower.tri(scores_matrix, diag = FALSE)
+objective_matrix <- scores_matrix * lower_triangular
+objective_matrix
+```
+
+The objective function is a polynomial which coefficients are the scores.
+
+We want to maximize the function:
+
+
+$0 \cdot x_{11} + 0 \cdot x_{12} + 0 \cdot x_{13} + 0 \cdot x_{14} + 7 \cdot x_{21} + 0 \cdot x_{22} + 0 \cdot x_{23} + 0 \cdot x_{24} +$ $8 \cdot x_{31} + 3 \cdot x_{32} + 0 \cdot x_{33} + 0 \cdot x_{34} + 2 \cdot x_{41} + 4 \cdot x_{42} + 6 \cdot x_{43} + 0 \cdot x_{44}$
+
+which reduces to: 
+
+$7 \cdot x_{21} + 8 \cdot x_{31} + 3 \cdot x_{32} + 2 \cdot x_{41} + 4 \cdot x_{42} + 6 \cdot x_{43}$
+
+If:
+
+* $x_{rc} = 1$ there is a match between person in row $r$ and column $c$, 
+* $x_{rc} = 0$ there is no match.
+
+## Conditions
+
+There are a few requirements that need to be met. These requirements imply optimization conditions.
+
+Arguments of `lpSolve::lp()` are split into coefficients, directions and values on the right-hand side.
+
+Let's initiate a list for each of these arguments:
+
+```{r}
+con_coeff <- list()
+con_dir   <- list()
+con_rhs   <- list()
+```
+
+### Requirement 1: Don't allow for pairs in the upper triangular
+
+We have limited the scores' matrix to the lower triangular. 
+
+Values of $x_{rc}$ in the upper triangular and on the diagonal don't impact the objective function. 
+
+Let's ensure that they amount to zero, i.e. $x_{rc} = 0$ if $r \leq c$.
+
+```{r}
+for (r in 1:n) {
+  for(c in 1:n) {
+    if(r <= c) {
+      m <- matrix(0, nrow = n, ncol = n)
+      m[r, c] = 1
+      
+      con_no = length(con_coeff) + 1
+      con_coeff[[con_no]] <- m
+      con_dir[[con_no]] <- "=="
+      con_rhs[[con_no]] <- 0
+      
+      cat(paste0("\nCondition ", con_no, " [dir: ", con_dir[[con_no]], " , rhs: ", con_rhs[[con_no]], " ]\n\n"))
+      print(con_coeff[[con_no]])
+    }
+  }
+}
+```
+
+### Requirement 2: Maximal numbers of pairs is $n/2$ (floored)
+
+If there are $n$ participants, there should be $\frac{n}{2}$ matches (or $\frac{n-1}{2}$ if $n$ is odd).
+
+This means that:
+$x_{21} + x_{31} + x_{32} + x_{41} + x_{42} + x_{43} = 2$
+
+The above formula can be computed as:
+```{r}
+con_no <- length(con_coeff) + 1
+
+con_coeff[[con_no]] <- 1 * lower_triangular
+con_dir[[con_no]]   <- "=="
+con_rhs[[con_no]]   <- floor(n/2)
+
+cat(paste0("Condition ", con_no, " [dir: ", con_dir[[con_no]], " , rhs: ", con_rhs[[con_no]], " ]\n\n"))
+print(con_coeff[[con_no]])
+```
+
+  
+### Requirement 3: Each person can have maximally one pair
+
+If there is an even number of participants, each person will have a pair.
+If there is an odd number of participants, one person will be left without a pair.
+
+The requirement of having at least one pair means that:
+
+* sum of each row must be lower or equal to $1$,
+* sum of each column must be lower or equal to $1$.
+
+As there are 4 rows and 4 columns, we have additional 8 conditions:
+
+```{r}
+# Rows
+for(i in 1:n) {
+  con_no <- length(con_coeff)+1
+  con_coeff[[con_no]] <- matrix(c(rep(0, (i-1)*n), rep(1, i), rep(0, (n-i)*(n+1))), byrow = TRUE, nrow = n)
+  con_dir[[con_no]] <- "<="
+  con_rhs[[con_no]] <- 1
+  
+  cat(paste0("\nCondition ", con_no, " [dir: ", con_dir[[con_no]], " , rhs: ", con_rhs[[con_no]], " ]\n\n"))
+  print(con_coeff[[con_no]])
+}
+
+# Columns
+for(i in 1:n) {
+  con_no <- length(con_coeff)+1
+  con_coeff[[con_no]] <- matrix(c(rep(0, (n-i)*(n+1)), rep(1, i), rep(0, (i-1)*n)), nrow = n)
+  con_dir[[con_no]] <- "<="
+  con_rhs[[con_no]] <- 1
+  
+  cat(paste0("\nCondition ", con_no, " [dir: ", con_dir[[con_no]], " , rhs: ", con_rhs[[con_no]], " ]\n\n"))
+  print(con_coeff[[con_no]])
+}
+
+```
+
+### Requirement 4: Pairs should be mirrored
+
+Within the lower triangular, $x_{rc} = x_{cr}$. This condition ensures that we match pairs in a mirrored way.
+
+```{r}
+for(i in 1:n) {
+  m <- matrix(rep(0, n^2), nrow = n)
+  m[i,] <- 1
+  m[,i] <- 1
+  m <- m * lower_triangular
+  
+  con_no <- length(con_coeff)+1
+  con_coeff[[con_no]] <- m
+  con_dir[[con_no]] <- "<="
+  con_rhs[[con_no]] <- "1"
+  
+  cat(paste0("\nCondition ", con_no, " [dir: ", con_dir[[con_no]], " , rhs: ", con_rhs[[con_no]], " ]\n\n"))
+  print(con_coeff[[con_no]])
+}
+
+```
+
+## Optimization
+
+Let's prepare arguments of the `lpSolve::lp()`.
+
+```{r}
+f.obj <- c(objective_matrix)
+f.con <- do.call(rbind, lapply(con_coeff, c))
+f.dir <- do.call(rbind, lapply(con_dir, c))
+f.rhs <- do.call(rbind, lapply(con_rhs, c))
+```
+
+And now we can perform the optimization.
+
+```{r}
+result <- lpSolve::lp("max", f.obj, f.con, f.dir, f.rhs)
+solution <- matrix(result$solution, nrow = n, dimnames = list(participants, participants))
+solution
+```
+
+Awesome! Our algorithm has connected Alice with Ben and Charlie with Donna as expected!
+
+We now know how to match people in pairs so that the population is as happy as possible.
+
+An application of this algorithm has been used in an R Shiny app [Optimate](https://zchmielewska.shinyapps.io/optimate/). Take a look!
+
+![](/post/2021-02-27-optimization-problem-solved-with-the-lpsolve-package_files/optimate.png)
+
+Have fun optimizing!

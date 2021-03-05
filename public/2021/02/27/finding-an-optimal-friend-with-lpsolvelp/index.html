@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Finding an optimal friend with lpSolve::lp() &middot; R for Actuaries</title>
+        <meta name="description" content="The lpSolve package is an excellent tool for optimization problems.
+In this post, we will use lpSolve::lp() to find an optimal friend.
+The problemImagine four people: Alice, Ben, Charlie and Donna.
+The values in the matrix below reflect how alike they are on a scale from 1 to 10.
+participants &lt;- c(&quot;Alice&quot;, &quot;Ben&quot;, &quot;Charlie&quot;, &quot;Donna&quot;)n = length(participants)data = c(10, 7, 8, 2, 7, 10, 3, 4,8, 3, 10, 6,2, 4, 6, 10)scores_matrix &lt;- matrix(data = data, nrow = n, dimnames = list(participants, participants))print(scores_matrix)## Alice Ben Charlie Donna## Alice 10 7 8 2## Ben 7 10 3 4## Charlie 8 3 10 6## Donna 2 4 6 10For example, Alice and Charlie have a lot in common, so their score is 8.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.65.2" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" href="/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        <script src="//yihui.org/js/math-code.js"></script>
+<script async
+src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+        
+        
+    </head>
+    <body>
+        
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="r4a" href="/">r4a</a>
+                            </h1>
+                        
+                        <a class="button-square" href="/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+    <li class="site-nav-item">
+        <a title="Blog" href="/">Blog</a>
+    </li>
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Finding an optimal friend with lpSolve::lp()</h1>
+    
+    <p class="post-date post-line">
+        <span>Published <time datetime="2021-02-27" itemprop="datePublished">2021-02-27</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">zchmielewska</a>
+            </span>
+        </span>
+    </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<p>The <code>lpSolve</code> package is an excellent tool for optimization problems.</p>
+<p>In this post, we will use <code>lpSolve::lp()</code> to find an optimal friend.</p>
+<div id="the-problem" class="section level1">
+<h1>The problem</h1>
+<p>Imagine four people: Alice, Ben, Charlie and Donna.</p>
+<p>The values in the matrix below reflect how alike they are on a scale from 1 to 10.</p>
+<pre class="r"><code>participants &lt;- c(&quot;Alice&quot;, &quot;Ben&quot;, &quot;Charlie&quot;, &quot;Donna&quot;)
+
+n = length(participants)
+
+data = c(10, 7, 8, 2, 
+         7, 10, 3, 4,
+         8, 3, 10, 6,
+         2, 4, 6, 10)
+
+scores_matrix &lt;- matrix(data = data, nrow = n, dimnames = list(participants, participants))
+
+print(scores_matrix)</code></pre>
+<pre><code>##         Alice Ben Charlie Donna
+## Alice      10   7       8     2
+## Ben         7  10       3     4
+## Charlie     8   3      10     6
+## Donna       2   4       6    10</code></pre>
+<p>For example, Alice and Charlie have a lot in common, so their score is 8.
+The score of Charlie and Ben is only 3 because they don’t share many interests.</p>
+<p>Our goal is to connect these 4 people into pairs, in a way that the total score is maximal.</p>
+<p>We could start with matching Alice with Charlie because their score is the highest (8 points).
+Then we need to match Ben with Donna who have 4 points.
+The total score would be <em>12</em> points.</p>
+<p>However, there is a solution that gains a better score.
+If we connect Alice with Ben (7 points) and Charlie with Donna (6 points), the total score is <em>13</em> points.</p>
+<p>How to find the best matches mathematically?</p>
+</div>
+<div id="optimization" class="section level1">
+<h1>Optimization</h1>
+<div id="objective" class="section level2">
+<h2>Objective</h2>
+<p>Let’s notice that the scores’ matrix is symmetrical. The score of Alice and Charlie is the same as the score of Charlie and Alice.</p>
+<p>Values on the diagonal are all 10’s because people know themselves the best. However, we want to connect each person with somebody else, so we can ignore the diagonal.</p>
+<p>The scores’ matrix can be limited to either lower or upper triangular.</p>
+<pre class="r"><code>lower_triangular &lt;- lower.tri(scores_matrix, diag = FALSE)
+objective_matrix &lt;- scores_matrix * lower_triangular
+objective_matrix</code></pre>
+<pre><code>##         Alice Ben Charlie Donna
+## Alice       0   0       0     0
+## Ben         7   0       0     0
+## Charlie     8   3       0     0
+## Donna       2   4       6     0</code></pre>
+<p>The objective function is a polynomial which coefficients are the scores.</p>
+<p>We want to maximize the function:</p>
+<p><span class="math inline">\(0 \cdot x_{11} + 0 \cdot x_{12} + 0 \cdot x_{13} + 0 \cdot x_{14} + 7 \cdot x_{21} + 0 \cdot x_{22} + 0 \cdot x_{23} + 0 \cdot x_{24} +\)</span> <span class="math inline">\(8 \cdot x_{31} + 3 \cdot x_{32} + 0 \cdot x_{33} + 0 \cdot x_{34} + 2 \cdot x_{41} + 4 \cdot x_{42} + 6 \cdot x_{43} + 0 \cdot x_{44}\)</span></p>
+<p>which reduces to:</p>
+<p><span class="math inline">\(7 \cdot x_{21} + 8 \cdot x_{31} + 3 \cdot x_{32} + 2 \cdot x_{41} + 4 \cdot x_{42} + 6 \cdot x_{43}\)</span></p>
+<p>If:</p>
+<ul>
+<li><span class="math inline">\(x_{rc} = 1\)</span> there is a match between person in row <span class="math inline">\(r\)</span> and column <span class="math inline">\(c\)</span>,</li>
+<li><span class="math inline">\(x_{rc} = 0\)</span> there is no match.</li>
+</ul>
+</div>
+<div id="conditions" class="section level2">
+<h2>Conditions</h2>
+<p>There are a few requirements that need to be met. These requirements imply optimization conditions.</p>
+<p>Arguments of <code>lpSolve::lp()</code> are split into coefficients, directions and values on the right-hand side.</p>
+<p>Let’s initiate a list for each of these arguments:</p>
+<pre class="r"><code>con_coeff &lt;- list()
+con_dir   &lt;- list()
+con_rhs   &lt;- list()</code></pre>
+<div id="requirement-1-dont-allow-for-pairs-in-the-upper-triangular" class="section level3">
+<h3>Requirement 1: Don’t allow for pairs in the upper triangular</h3>
+<p>We have limited the scores’ matrix to the lower triangular.</p>
+<p>Values of <span class="math inline">\(x_{rc}\)</span> in the upper triangular and on the diagonal don’t impact the objective function.</p>
+<p>Let’s ensure that they amount to zero, i.e. <span class="math inline">\(x_{rc} = 0\)</span> if <span class="math inline">\(r \leq c\)</span>.</p>
+<pre class="r"><code>for (r in 1:n) {
+  for(c in 1:n) {
+    if(r &lt;= c) {
+      m &lt;- matrix(0, nrow = n, ncol = n)
+      m[r, c] = 1
+      
+      con_no = length(con_coeff) + 1
+      con_coeff[[con_no]] &lt;- m
+      con_dir[[con_no]] &lt;- &quot;==&quot;
+      con_rhs[[con_no]] &lt;- 0
+      
+      cat(paste0(&quot;\nCondition &quot;, con_no, &quot; [dir: &quot;, con_dir[[con_no]], &quot; , rhs: &quot;, con_rhs[[con_no]], &quot; ]\n\n&quot;))
+      print(con_coeff[[con_no]])
+    }
+  }
+}</code></pre>
+<pre><code>## 
+## Condition 1 [dir: == , rhs: 0 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    1    0    0    0
+## [2,]    0    0    0    0
+## [3,]    0    0    0    0
+## [4,]    0    0    0    0
+## 
+## Condition 2 [dir: == , rhs: 0 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    1    0    0
+## [2,]    0    0    0    0
+## [3,]    0    0    0    0
+## [4,]    0    0    0    0
+## 
+## Condition 3 [dir: == , rhs: 0 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    0    1    0
+## [2,]    0    0    0    0
+## [3,]    0    0    0    0
+## [4,]    0    0    0    0
+## 
+## Condition 4 [dir: == , rhs: 0 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    0    0    1
+## [2,]    0    0    0    0
+## [3,]    0    0    0    0
+## [4,]    0    0    0    0
+## 
+## Condition 5 [dir: == , rhs: 0 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    0    0    0
+## [2,]    0    1    0    0
+## [3,]    0    0    0    0
+## [4,]    0    0    0    0
+## 
+## Condition 6 [dir: == , rhs: 0 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    0    0    0
+## [2,]    0    0    1    0
+## [3,]    0    0    0    0
+## [4,]    0    0    0    0
+## 
+## Condition 7 [dir: == , rhs: 0 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    0    0    0
+## [2,]    0    0    0    1
+## [3,]    0    0    0    0
+## [4,]    0    0    0    0
+## 
+## Condition 8 [dir: == , rhs: 0 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    0    0    0
+## [2,]    0    0    0    0
+## [3,]    0    0    1    0
+## [4,]    0    0    0    0
+## 
+## Condition 9 [dir: == , rhs: 0 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    0    0    0
+## [2,]    0    0    0    0
+## [3,]    0    0    0    1
+## [4,]    0    0    0    0
+## 
+## Condition 10 [dir: == , rhs: 0 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    0    0    0
+## [2,]    0    0    0    0
+## [3,]    0    0    0    0
+## [4,]    0    0    0    1</code></pre>
+</div>
+<div id="requirement-2-maximal-numbers-of-pairs-is-n2-floored" class="section level3">
+<h3>Requirement 2: Maximal numbers of pairs is <span class="math inline">\(n/2\)</span> (floored)</h3>
+<p>If there are <span class="math inline">\(n\)</span> participants, there should be <span class="math inline">\(\frac{n}{2}\)</span> matches (or <span class="math inline">\(\frac{n-1}{2}\)</span> if <span class="math inline">\(n\)</span> is odd).</p>
+<p>This means that:
+<span class="math inline">\(x_{21} + x_{31} + x_{32} + x_{41} + x_{42} + x_{43} = 2\)</span></p>
+<p>The above formula can be computed as:</p>
+<pre class="r"><code>con_no &lt;- length(con_coeff) + 1
+
+con_coeff[[con_no]] &lt;- 1 * lower_triangular
+con_dir[[con_no]]   &lt;- &quot;==&quot;
+con_rhs[[con_no]]   &lt;- floor(n/2)
+
+cat(paste0(&quot;Condition &quot;, con_no, &quot; [dir: &quot;, con_dir[[con_no]], &quot; , rhs: &quot;, con_rhs[[con_no]], &quot; ]\n\n&quot;))</code></pre>
+<pre><code>## Condition 11 [dir: == , rhs: 2 ]</code></pre>
+<pre class="r"><code>print(con_coeff[[con_no]])</code></pre>
+<pre><code>##      [,1] [,2] [,3] [,4]
+## [1,]    0    0    0    0
+## [2,]    1    0    0    0
+## [3,]    1    1    0    0
+## [4,]    1    1    1    0</code></pre>
+</div>
+<div id="requirement-3-each-person-can-have-maximally-one-pair" class="section level3">
+<h3>Requirement 3: Each person can have maximally one pair</h3>
+<p>If there is an even number of participants, each person will have a pair.
+If there is an odd number of participants, one person will be left without a pair.</p>
+<p>The requirement of having at least one pair means that:</p>
+<ul>
+<li>sum of each row must be lower or equal to <span class="math inline">\(1\)</span>,</li>
+<li>sum of each column must be lower or equal to <span class="math inline">\(1\)</span>.</li>
+</ul>
+<p>As there are 4 rows and 4 columns, we have additional 8 conditions:</p>
+<pre class="r"><code># Rows
+for(i in 1:n) {
+  con_no &lt;- length(con_coeff)+1
+  con_coeff[[con_no]] &lt;- matrix(c(rep(0, (i-1)*n), rep(1, i), rep(0, (n-i)*(n+1))), byrow = TRUE, nrow = n)
+  con_dir[[con_no]] &lt;- &quot;&lt;=&quot;
+  con_rhs[[con_no]] &lt;- 1
+  
+  cat(paste0(&quot;\nCondition &quot;, con_no, &quot; [dir: &quot;, con_dir[[con_no]], &quot; , rhs: &quot;, con_rhs[[con_no]], &quot; ]\n\n&quot;))
+  print(con_coeff[[con_no]])
+}</code></pre>
+<pre><code>## 
+## Condition 12 [dir: &lt;= , rhs: 1 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    1    0    0    0
+## [2,]    0    0    0    0
+## [3,]    0    0    0    0
+## [4,]    0    0    0    0
+## 
+## Condition 13 [dir: &lt;= , rhs: 1 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    0    0    0
+## [2,]    1    1    0    0
+## [3,]    0    0    0    0
+## [4,]    0    0    0    0
+## 
+## Condition 14 [dir: &lt;= , rhs: 1 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    0    0    0
+## [2,]    0    0    0    0
+## [3,]    1    1    1    0
+## [4,]    0    0    0    0
+## 
+## Condition 15 [dir: &lt;= , rhs: 1 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    0    0    0
+## [2,]    0    0    0    0
+## [3,]    0    0    0    0
+## [4,]    1    1    1    1</code></pre>
+<pre class="r"><code># Columns
+for(i in 1:n) {
+  con_no &lt;- length(con_coeff)+1
+  con_coeff[[con_no]] &lt;- matrix(c(rep(0, (n-i)*(n+1)), rep(1, i), rep(0, (i-1)*n)), nrow = n)
+  con_dir[[con_no]] &lt;- &quot;&lt;=&quot;
+  con_rhs[[con_no]] &lt;- 1
+  
+  cat(paste0(&quot;\nCondition &quot;, con_no, &quot; [dir: &quot;, con_dir[[con_no]], &quot; , rhs: &quot;, con_rhs[[con_no]], &quot; ]\n\n&quot;))
+  print(con_coeff[[con_no]])
+}</code></pre>
+<pre><code>## 
+## Condition 16 [dir: &lt;= , rhs: 1 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    0    0    0
+## [2,]    0    0    0    0
+## [3,]    0    0    0    0
+## [4,]    0    0    0    1
+## 
+## Condition 17 [dir: &lt;= , rhs: 1 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    0    0    0
+## [2,]    0    0    0    0
+## [3,]    0    0    1    0
+## [4,]    0    0    1    0
+## 
+## Condition 18 [dir: &lt;= , rhs: 1 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    0    0    0
+## [2,]    0    1    0    0
+## [3,]    0    1    0    0
+## [4,]    0    1    0    0
+## 
+## Condition 19 [dir: &lt;= , rhs: 1 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    1    0    0    0
+## [2,]    1    0    0    0
+## [3,]    1    0    0    0
+## [4,]    1    0    0    0</code></pre>
+</div>
+<div id="requirement-4-pairs-should-be-mirrored" class="section level3">
+<h3>Requirement 4: Pairs should be mirrored</h3>
+<p>Within the lower triangular, <span class="math inline">\(x_{rc} = x_{cr}\)</span>. This condition ensures that we match pairs in a mirrored way.</p>
+<pre class="r"><code>for(i in 1:n) {
+  m &lt;- matrix(rep(0, n^2), nrow = n)
+  m[i,] &lt;- 1
+  m[,i] &lt;- 1
+  m &lt;- m * lower_triangular
+  
+  con_no &lt;- length(con_coeff)+1
+  con_coeff[[con_no]] &lt;- m
+  con_dir[[con_no]] &lt;- &quot;&lt;=&quot;
+  con_rhs[[con_no]] &lt;- &quot;1&quot;
+  
+  cat(paste0(&quot;\nCondition &quot;, con_no, &quot; [dir: &quot;, con_dir[[con_no]], &quot; , rhs: &quot;, con_rhs[[con_no]], &quot; ]\n\n&quot;))
+  print(con_coeff[[con_no]])
+}</code></pre>
+<pre><code>## 
+## Condition 20 [dir: &lt;= , rhs: 1 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    0    0    0
+## [2,]    1    0    0    0
+## [3,]    1    0    0    0
+## [4,]    1    0    0    0
+## 
+## Condition 21 [dir: &lt;= , rhs: 1 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    0    0    0
+## [2,]    1    0    0    0
+## [3,]    0    1    0    0
+## [4,]    0    1    0    0
+## 
+## Condition 22 [dir: &lt;= , rhs: 1 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    0    0    0
+## [2,]    0    0    0    0
+## [3,]    1    1    0    0
+## [4,]    0    0    1    0
+## 
+## Condition 23 [dir: &lt;= , rhs: 1 ]
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    0    0    0    0
+## [2,]    0    0    0    0
+## [3,]    0    0    0    0
+## [4,]    1    1    1    0</code></pre>
+</div>
+</div>
+<div id="optimization-1" class="section level2">
+<h2>Optimization</h2>
+<p>Let’s prepare arguments of the <code>lpSolve::lp()</code>.</p>
+<pre class="r"><code>f.obj &lt;- c(objective_matrix)
+f.con &lt;- do.call(rbind, lapply(con_coeff, c))
+f.dir &lt;- do.call(rbind, lapply(con_dir, c))
+f.rhs &lt;- do.call(rbind, lapply(con_rhs, c))</code></pre>
+<p>And now we can perform the optimization.</p>
+<pre class="r"><code>result &lt;- lpSolve::lp(&quot;max&quot;, f.obj, f.con, f.dir, f.rhs)
+solution &lt;- matrix(result$solution, nrow = n, dimnames = list(participants, participants))
+solution</code></pre>
+<pre><code>##         Alice Ben Charlie Donna
+## Alice       0   0       0     0
+## Ben         1   0       0     0
+## Charlie     0   0       0     0
+## Donna       0   0       1     0</code></pre>
+<p>Awesome! Our algorithm has connected Alice with Ben and Charlie with Donna as expected!</p>
+<p>We now know how to match people in pairs so that the population is as happy as possible.</p>
+<p>An application of this algorithm has been used in an R Shiny app <a href="https://zchmielewska.shinyapps.io/optimate/">Optimate</a>. Take a look!</p>
+<p><img src="/post/2021-02-27-optimization-problem-solved-with-the-lpsolve-package_files/optimate.png" /></p>
+<p>Have fun optimizing!</p>
+</div>
+</div>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+
+    <div class="share">
+        
+
+        
+
+        
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="r4a" href="/">r4a</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2021 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="/js/jquery-1.11.3.min.js"></script>
+        <script src="/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        
+        
+        <script src="/js/scripts.js"></script>
+    </body>
+</html>
+
